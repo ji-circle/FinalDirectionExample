@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">FinalDirectionExample01</string>
+    <string name="google_maps_key" translatable="false">AIzaSyBqe8TQyjF1ndxlzGoZ6GYiWokc8Mi-77U</string>
+    <string-array name="transport_modes">
+        <item>driving</item>
+        <item>walking</item>
+        <item>bicycling</item>
+        <item>transit</item>
+    </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

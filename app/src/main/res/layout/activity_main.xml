@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/main">
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</FrameLayout>
+
+
+
+    <!--<?xml version="1.0" encoding="utf-8"?>-->
+    <!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--    xmlns:tools="http://schemas.android.com/tools"-->
+    <!--    android:id="@+id/main"-->
+    <!--    android:layout_width="match_parent"-->
+    <!--    android:layout_height="match_parent"-->
+    <!--    tools:context=".MainActivity">-->
+
+    <!--    <fragment-->
+    <!--        android:id="@+id/map"-->
+    <!--        android:name="com.google.android.gms.maps.SupportMapFragment"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        android:layout_above="@+id/inputLayout" />-->
+
+    <!--    <LinearLayout-->
+    <!--        android:id="@+id/inputLayout"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:orientation="vertical"-->
+    <!--        android:padding="16dp"-->
+    <!--        android:background="#CCFFFFFF"-->
+    <!--        android:layout_alignParentTop="true">-->
+
+    <!--        <EditText-->
+    <!--            android:id="@+id/originEditText"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:hint="Enter origin" />-->
+
+    <!--        <EditText-->
+    <!--            android:id="@+id/destinationEditText"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:hint="Enter destination" />-->
+
+    <!--        <Spinner-->
+    <!--            android:id="@+id/modeSpinner"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:entries="@array/transport_modes" />-->
+
+    <!--        <EditText-->
+    <!--            android:id="@+id/arrivalTimeEditText"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:hint="Enter arrival time (HH:mm)" />-->
+
+    <!--        <Button-->
+    <!--            android:id="@+id/directionsButton"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:text="Get Directions"-->
+    <!--            android:layout_gravity="center_horizontal" />-->
+    <!--    </LinearLayout>-->
+
+    <!--    <Button-->
+    <!--        android:id="@+id/toggleBottomSheetButton"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:text="Toggle Bottom Sheet"-->
+    <!--        android:layout_alignParentBottom="true"-->
+    <!--        android:layout_centerHorizontal="true"-->
+    <!--        android:visibility="gone" />-->
+
+    <!--    <LinearLayout-->
+    <!--        android:id="@+id/bottomSheet"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:orientation="vertical"-->
+    <!--        android:padding="16dp"-->
+    <!--        android:background="#CCFFFFFF"-->
+    <!--        android:layout_above="@+id/toggleBottomSheetButton"-->
+    <!--        android:visibility="gone" >-->
+
+    <!--        &lt;!&ndash; 바텀 시트 내용을 여기에 추가 &ndash;&gt;-->
+
+    <!--    </LinearLayout>-->
+
+    <!--</RelativeLayout>-->
+    <!-- activity_main.xml -->

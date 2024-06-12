@@ -9,7 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.finaldirectionexample01.domain.usecase.GetDirectionsUseCase
 import kotlinx.coroutines.launch
 
-class DirectionsViewModel1 (private val getDirectionsUseCase: GetDirectionsUseCase) : ViewModel() {
+class DirectionsViewModel1(private val getDirectionsUseCase: GetDirectionsUseCase) : ViewModel() {
     private val _directionsResult = MutableLiveData<DirectionsModel>()
     val directionsResult: LiveData<DirectionsModel> get() = _directionsResult
 
@@ -22,6 +22,7 @@ class DirectionsViewModel1 (private val getDirectionsUseCase: GetDirectionsUseCa
             try {
                 val result = getDirectionsUseCase(origin, destination, mode)
                 _directionsResult.postValue(result.toModel())
+                _directionsResult.value = result.toModel()
                 Log.d("확인", "viewmodel: ${_directionsResult.value}")
             } catch (e: Exception) {
                 _error.postValue(e.message)
@@ -30,7 +31,8 @@ class DirectionsViewModel1 (private val getDirectionsUseCase: GetDirectionsUseCa
     }
 }
 
-class DirectionsViewModel1Factory(private val getDirectionsUseCase: GetDirectionsUseCase) : ViewModelProvider.Factory {
+class DirectionsViewModel1Factory(private val getDirectionsUseCase: GetDirectionsUseCase) :
+    ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(DirectionsViewModel1::class.java)) {
             @Suppress("UNCHECKED_CAST")

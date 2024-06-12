@@ -12,7 +12,7 @@ class AppContainer {
 
     private val directionsApiService = NetworkClient.directionsApiService
 
-    val directionsRepository : DirectionsRepository by lazy {
+    val directionsRepository: DirectionsRepository by lazy {
         DirectionsRepositoryImpl(directionsApiService)
     }
 
@@ -22,7 +22,16 @@ class AppContainer {
 
 //    val directionsContainer: DirectionsContainer?= null
 
-    var directions1Container : Directions1Container?= null
+    val directions1Container: Directions1Container by lazy {
+        Directions1Container(getDirectionsUseCase)
+    }
+
+//    var directions1Container: Directions1Container? = null
+//        private set
+//
+//    init{
+//        directions1Container = Directions1Container(getDirectionsUseCase)
+//    }
     //val directions1Container: Directions1Container? by lazy {
     //    Directions1Container(getDirectionsUseCase)
     //}
@@ -38,7 +47,7 @@ class AppContainer {
 
 class Directions1Container(
     private val getDirectionsUseCase: GetDirectionsUseCase
-){
+) {
     val directionsViewModel1Factory = DirectionsViewModel1Factory(
         getDirectionsUseCase
     )

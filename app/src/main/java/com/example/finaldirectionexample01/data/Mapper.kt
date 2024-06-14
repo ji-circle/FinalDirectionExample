@@ -15,7 +15,7 @@ import com.example.finaldirectionexample01.data.model.DirectionsTransitStop
 import com.example.finaldirectionexample01.data.model.DirectionsTransitVehicle
 import com.example.finaldirectionexample01.data.model.DirectionsViaWaypoint
 import com.example.finaldirectionexample01.data.model.Fare
-import com.example.finaldirectionexample01.data.model.LatLngLiteral
+import com.google.android.gms.maps.model.LatLng
 import com.example.finaldirectionexample01.data.model.TextValueObject
 import com.example.finaldirectionexample01.data.model.TimeZoneTextValueObject
 import com.example.finaldirectionexample01.domain.BoundsEntity
@@ -33,7 +33,6 @@ import com.example.finaldirectionexample01.domain.DirectionsTransitStopEntity
 import com.example.finaldirectionexample01.domain.DirectionsTransitVehicleEntity
 import com.example.finaldirectionexample01.domain.DirectionsViaWaypointEntity
 import com.example.finaldirectionexample01.domain.FareEntity
-import com.example.finaldirectionexample01.domain.LatLngLiteralEntity
 import com.example.finaldirectionexample01.domain.TextValueObjectEntity
 import com.example.finaldirectionexample01.domain.TimeZoneTextValueObjectEntity
 
@@ -56,13 +55,7 @@ fun DirectionsGeocodedWaypoint.toEntity() = DirectionsGeocodedWaypointEntity(
 )
 
 fun DirectionsRoute.toEntity() = DirectionsRouteEntity(
-    bounds = bounds?.toEntity() ?: BoundsEntity(
-        northeast = LatLngLiteralEntity(
-            lat = 0.0,
-            lng = 0.0
-        ), southwest = LatLngLiteralEntity(lat = 0.0, lng = 0.0)
-    ),
-    //bounds = bounds?.toEntity() ?: BoundsEntity(),
+    bounds = bounds?.toEntity() ?: BoundsEntity(LatLng(0.0, 0.0), LatLng(0.0, 0.0)),
     copyrights = copyrights ?: "",
     legs = legs?.map {
         it.toEntity()
@@ -76,25 +69,25 @@ fun DirectionsRoute.toEntity() = DirectionsRouteEntity(
 )
 
 fun Bounds.toEntity() = BoundsEntity(
-    northeast = northeast?.toEntity() ?: LatLngLiteralEntity(lat = 0.0, lng = 0.0),
-    southwest = southwest?.toEntity() ?: LatLngLiteralEntity(lat = 0.0, lng = 0.0)
+//    northeast, southwest
+    northeast ?: LatLng(0.0, 0.0), southwest ?: LatLng(0.0, 0.0)
+//    northeast = northeast?.toEntity() ?: LatLng(),
+//    southwest = southwest?.toEntity() ?: LatLng()
 )
 
-fun LatLngLiteral.toEntity() = LatLngLiteralEntity(
-    lat = lat ?: 0.0,
-    lng = lng ?: 0.0
-)
+//fun LatLngLiteral.toEntity() = LatLngLiteralEntity(
+//    lat = lat ?: 0.0,
+//    lng = lng ?: 0.0
+//)
 
 fun DirectionsLeg.toEntity() = DirectionsLegEntity(
     totalEndAddress = totalEndAddress ?: "",
-    totalEndLocation = totalEndLocation?.toEntity() ?: LatLngLiteralEntity(
-        lat = 0.0,
-        lng = 0.0
+    totalEndLocation = totalEndLocation ?: LatLng(
+        0.0, 0.0
     ), // 수정된 부분
     totalStartAddress = totalStartAddress ?: "",
-    totalStartLocation = totalStartLocation?.toEntity() ?: LatLngLiteralEntity(
-        lat = 0.0,
-        lng = 0.0
+    totalStartLocation = totalStartLocation ?: LatLng(
+        0.0, 0.0
     ), // 수정된 부분
     steps = steps?.map {
         it.toEntity()
@@ -141,21 +134,21 @@ fun DirectionsLeg.toEntity() = DirectionsLegEntity(
 fun DirectionsStep.toEntity(): DirectionsStepEntity {
     return DirectionsStepEntity(
         stepDuration = stepDuration?.toEntity() ?: TextValueObjectEntity(text = "", value = 0.0),
-        endLocation = endLocation?.toEntity() ?: LatLngLiteralEntity(lat = 0.0, lng = 0.0),
+        endLocation = endLocation?: LatLng(0.0, 0.0),
         htmlInstructions = htmlInstructions ?: "",
         polyline = polyline?.toEntity() ?: DirectionsPolylineEntity(points = ""),
-        startLocation = startLocation?.toEntity() ?: LatLngLiteralEntity(lat = 0.0, lng = 0.0),
+        startLocation = startLocation?: LatLng(0.0, 0.0),
         travelMode = travelMode ?: "",
         distance = distance?.toEntity() ?: TextValueObjectEntity(text = "", value = 0.0),
         stepInSteps = stepInSteps?.map { it.toEntity() } ?: emptyList(),
         transitDetails = transitDetails?.toEntity() ?: DirectionsTransitDetailsEntity(
             arrivalStop = DirectionsTransitStopEntity(
-                location = LatLngLiteralEntity(lat = 0.0, lng = 0.0),
+                location = LatLng(0.0, 0.0),
                 name = ""
             ),
             arrivalTime = TimeZoneTextValueObjectEntity(text = "", timeZone = "", value = 0.0),
             departureStop = DirectionsTransitStopEntity(
-                location = LatLngLiteralEntity(lat = 0.0, lng = 0.0),
+                location = LatLng(0.0, 0.0),
                 name = ""
             ),
             departureTime = TimeZoneTextValueObjectEntity(text = "", timeZone = "", value = 0.0),
@@ -184,13 +177,19 @@ fun DirectionsStep.toEntity(): DirectionsStepEntity {
 
 
 fun DirectionsTransitDetails.toEntity() = DirectionsTransitDetailsEntity(
-    arrivalStop = arrivalStop?.toEntity() ?: DirectionsTransitStopEntity(location = LatLngLiteralEntity(lat = 0.0, lng = 0.0), name = ""),
+    arrivalStop = arrivalStop?.toEntity() ?: DirectionsTransitStopEntity(
+        location = LatLng(0.0, 0.0),
+        name = ""
+    ),
     arrivalTime = arrivalTime?.toEntity() ?: TimeZoneTextValueObjectEntity(
         text = "",
         timeZone = "",
         value = 0.0
     ),
-    departureStop = departureStop?.toEntity() ?: DirectionsTransitStopEntity(location = LatLngLiteralEntity(lat = 0.0, lng = 0.0), name = ""),
+    departureStop = departureStop?.toEntity() ?: DirectionsTransitStopEntity(
+        location = LatLng(0.0, 0.0),
+        name = ""
+    ),
     departureTime = departureTime?.toEntity() ?: TimeZoneTextValueObjectEntity(
         text = "",
         timeZone = "",
@@ -198,7 +197,16 @@ fun DirectionsTransitDetails.toEntity() = DirectionsTransitDetailsEntity(
     ),
     headSign = headSign ?: "",
     headWay = headWay ?: 0,
-    line = line?.toEntity() ?: DirectionsTransitLineEntity(agencies = emptyList(), color = "", icon = "", name = "", shortName = "", textColor = "", url = "", vehicle = DirectionsTransitVehicleEntity(name = "", type = "", icon = "", localIcon = "")),
+    line = line?.toEntity() ?: DirectionsTransitLineEntity(
+        agencies = emptyList(),
+        color = "",
+        icon = "",
+        name = "",
+        shortName = "",
+        textColor = "",
+        url = "",
+        vehicle = DirectionsTransitVehicleEntity(name = "", type = "", icon = "", localIcon = "")
+    ),
     numStops = numStops ?: 0,
     tripShortName = tripShortName ?: ""
 )
@@ -208,7 +216,7 @@ fun DirectionsPolyline.toEntity() = DirectionsPolylineEntity(
 )
 
 fun DirectionsTransitStop.toEntity() = DirectionsTransitStopEntity(
-    location = location?.toEntity() ?: LatLngLiteralEntity(lat = 0.0, lng = 0.0),
+    location = location?:LatLng(0.0, 0.0),
     name = name ?: ""
 )
 
@@ -220,7 +228,12 @@ fun DirectionsTransitLine.toEntity() = DirectionsTransitLineEntity(
     shortName = shortName ?: "",
     textColor = textColor ?: "",
     url = url ?: "",
-    vehicle = vehicle?.toEntity() ?: DirectionsTransitVehicleEntity(name = "", type = "", icon = "", localIcon = "")
+    vehicle = vehicle?.toEntity() ?: DirectionsTransitVehicleEntity(
+        name = "",
+        type = "",
+        icon = "",
+        localIcon = ""
+    )
 )
 
 fun DirectionsTransitAgency.toEntity() = DirectionsTransitAgencyEntity(
@@ -242,7 +255,7 @@ fun DirectionsTrafficSpeedEntry.toEntity() = DirectionsTrafficSpeedEntryEntity(
 )
 
 fun DirectionsViaWaypoint.toEntity() = DirectionsViaWaypointEntity(
-    location = location?.toEntity() ?: LatLngLiteralEntity(lat = 0.0, lng = 0.0),
+    location = location?: LatLng(0.0, 0.0),
     stepIndex = stepIndex ?: 0,
     stepInterpolation = stepInterpolation ?: 0
 )

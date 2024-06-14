@@ -11,6 +11,7 @@ plugins {
 
 }
 
+
 android {
     namespace = "com.example.finaldirectionexample01"
     compileSdk = 34
@@ -133,5 +134,9 @@ dependencies {
     implementation("com.google.firebase:firebase-auth-ktx")
 
     implementation ("androidx.fragment:fragment-ktx:1.3.6")
+
+
+    //polyline?
+    implementation("com.google.maps.android:android-maps-utils:2.2.3")
 
 }

@@ -1,5 +1,7 @@
 package com.example.finaldirectionexample01.presentation
 
+import com.google.android.gms.maps.model.LatLng
+
 
 data class DirectionsModel(
     val routes: List<DirectionsRouteModel>,
@@ -27,20 +29,20 @@ data class DirectionsRouteModel(
 )
 
 data class BoundsModel(
-    val northeast: LatLngLiteralModel,
-    val southwest: LatLngLiteralModel
+    val northeast: LatLng,
+    val southwest: LatLng
 )
 
-data class LatLngLiteralModel(
-    val lat: Double,
-    val lng: Double
-)
+//data class LatLngLiteralModel(
+//    val lat: Double,
+//    val lng: Double
+//)
 
 data class DirectionsLegModel(
     val totalEndAddress: String,
-    val totalEndLocation: LatLngLiteralModel,
+    val totalEndLocation: LatLng,
     val totalStartAddress: String,
-    val totalStartLocation: LatLngLiteralModel,
+    val totalStartLocation: LatLng,
     val steps: List<DirectionsStepModel>,
     val trafficSpeedEntry: List<DirectionsTrafficSpeedEntryModel>,
     val viaWaypoint: List<DirectionsViaWaypointModel>,
@@ -53,10 +55,10 @@ data class DirectionsLegModel(
 
 data class DirectionsStepModel(
     val stepDuration: TextValueObjectModel,
-    val endLocation: LatLngLiteralModel,
+    val endLocation: LatLng,
     val htmlInstructions: String,
     val polyline: DirectionsPolylineModel,
-    val startLocation: LatLngLiteralModel,
+    val startLocation: LatLng,
     val travelMode: String,
     val distance: TextValueObjectModel,
     val stepInSteps: List<DirectionsStepModel>,
@@ -80,7 +82,7 @@ data class DirectionsPolylineModel(
 )
 
 data class DirectionsTransitStopModel(
-    val location: LatLngLiteralModel,
+    val location: LatLng,
     val name: String
 )
 
@@ -114,7 +116,7 @@ data class DirectionsTrafficSpeedEntryModel(
 )
 
 data class DirectionsViaWaypointModel(
-    val location: LatLngLiteralModel,
+    val location: LatLng,
     val stepIndex: Int,
     val stepInterpolation: Number
 )

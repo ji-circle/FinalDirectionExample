@@ -29,12 +29,21 @@
             android:layout_height="wrap_content"
             android:text="Search" />
 
+
         <Button
             android:id="@+id/btnBottomSheet"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="bottomSheet"
             android:visibility="invisible"/>
+
+        <Button
+            android:id="@+id/btnMap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            android:text="showMap"/>
+
     </LinearLayout>
 
     <ScrollView

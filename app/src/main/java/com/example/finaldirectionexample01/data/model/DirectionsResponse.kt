@@ -35,21 +35,21 @@ data class DirectionsRoute(
 )
 
 data class Bounds(
-    @SerializedName("northeast") val northeast: LatLngLiteral?,
-    @SerializedName("southwest") val southwest: LatLngLiteral?
+    @SerializedName("northeast") val northeast: com.google.android.gms.maps.model.LatLng?,
+    @SerializedName("southwest") val southwest: com.google.android.gms.maps.model.LatLng?
 )
 
-data class LatLngLiteral(
-    @SerializedName("lat") val lat: Double?,
-    @SerializedName("lng") val lng: Double? //원래 number이었음... longtitude in decimal degrees
-
-)
+//data class com.google.android.gms.maps.model.LatLngLiteral(
+//    @SerializedName("lat") val lat: Double?,
+//    @SerializedName("lng") val lng: Double? //원래 number이었음... longtitude in decimal degrees
+//
+//)
 
 data class DirectionsLeg(
     @SerializedName("end_address") val totalEndAddress: String?,
-    @SerializedName("end_location") val totalEndLocation: LatLngLiteral?,
+    @SerializedName("end_location") val totalEndLocation: com.google.android.gms.maps.model.LatLng?,
     @SerializedName("start_address") val totalStartAddress: String?,
-    @SerializedName("start_location") val totalStartLocation: LatLngLiteral?,
+    @SerializedName("start_location") val totalStartLocation: com.google.android.gms.maps.model.LatLng?,
     @SerializedName("steps") val steps: List<DirectionsStep>?,
     @SerializedName("traffic_speed_entry") val trafficSpeedEntry: List<DirectionsTrafficSpeedEntry>?,
     @SerializedName("via_waypoint") val viaWaypoint: List<DirectionsViaWaypoint>?,
@@ -62,10 +62,10 @@ data class DirectionsLeg(
 
 data class DirectionsStep(
     @SerializedName("duration") val stepDuration: TextValueObject?,
-    @SerializedName("end_location") val endLocation:LatLngLiteral?,
+    @SerializedName("end_location") val endLocation:com.google.android.gms.maps.model.LatLng?,
     @SerializedName("html_instructions") val htmlInstructions: String?,
     @SerializedName("polyline") val polyline: DirectionsPolyline?,
-    @SerializedName("start_location") val startLocation: LatLngLiteral?,
+    @SerializedName("start_location") val startLocation: com.google.android.gms.maps.model.LatLng?,
     @SerializedName("travel_mode") val travelMode: String?,
     @SerializedName("distance") val distance: TextValueObject?,
     @SerializedName("steps") val stepInSteps: List<DirectionsStep>?,//
@@ -90,7 +90,7 @@ data class DirectionsPolyline(
 )
 
 data class DirectionsTransitStop(
-    @SerializedName("location") val location: LatLngLiteral?,
+    @SerializedName("location") val location: com.google.android.gms.maps.model.LatLng?,
     @SerializedName("name") val name: String?
 )
 
@@ -124,7 +124,7 @@ data class DirectionsTrafficSpeedEntry(
 )
 
 data class DirectionsViaWaypoint(
-    @SerializedName("location") val location: LatLngLiteral?,
+    @SerializedName("location") val location: com.google.android.gms.maps.model.LatLng?,
     @SerializedName("step_index") val stepIndex: Int?,
     @SerializedName("step_interpolation") val stepInterpolation: Double?
 )

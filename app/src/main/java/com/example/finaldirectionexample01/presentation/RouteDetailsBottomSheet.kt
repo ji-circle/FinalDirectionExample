@@ -1,10 +1,13 @@
 package com.example.finaldirectionexample01.presentation
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.activityViewModels
 import com.example.finaldirectionexample01.FinalDirectionApplication
 import com.example.finaldirectionexample01.data.AppContainer
@@ -21,7 +24,8 @@ class RouteDetailsBottomSheet : BottomSheetDialogFragment() {
 
     // DirectionsViewModel1Factory 가져오기
     private val directionsViewModel1Factory: DirectionsViewModel1Factory by lazy {
-        appContainer.directions1Container?.directionsViewModel1Factory ?: throw IllegalStateException("DirectionsViewModel1Factory not initialized properly")
+        appContainer.directions1Container?.directionsViewModel1Factory
+            ?: throw IllegalStateException("DirectionsViewModel1Factory not initialized properly")
     }
 
     // SharedViewModel 가져오기
@@ -38,6 +42,12 @@ class RouteDetailsBottomSheet : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        Log.d(
+            "확인",
+            "값들 : ${sharedViewModel.origin.value.toString()}, ${sharedViewModel.destination.value.toString()},${sharedViewModel.mode.value.toString()}"
+        )
+
         sharedViewModel.directionsResult.observe(viewLifecycleOwner, { directions ->
             directions?.let { directions ->
                 val resultText = StringBuilder()
@@ -51,19 +61,17 @@ class RouteDetailsBottomSheet : BottomSheetDialogFragment() {
                             resultText.append("  Duration: ${step.stepDuration.text}\n")
                             resultText.append("  Distance: ${step.distance.text}\n")
                             resultText.append("  Travel Mode: ${step.travelMode}\n")
-                            // 추가적인 정보는 필요에 따라 처리
                         }
                     }
                 }
-                // TextView에 결과를 표시
                 binding.routeDetailsText.text = resultText.toString()
             }
         })
 
-        // 공유 뷰모델에서 오류 메시지를 관찰하여 필요한 경우 토스트 메시지로 표시
         sharedViewModel.error.observe(viewLifecycleOwner) { errorMessage ->
             Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
         }
+        addCheckBoxes()
 
     }
 
@@ -72,4 +80,81 @@ class RouteDetailsBottomSheet : BottomSheetDialogFragment() {
         _binding = null
     }
 
+    private fun addCheckBoxes() {
+        val optionsLayout = binding.optionsLayout
+        val informationOptions = listOf(
+            "Total Distance",
+            "Total Duration",
+            "Step Duration",
+            "HTML Instructions"
+        )
+
+        val informationMap = mapOf(
+            "Total Distance" to { directions: DirectionsModel ->
+                val totalDistance = StringBuilder()
+                directions.routes.forEach { route ->
+                    route.legs.forEach { leg ->
+                        totalDistance.append("Total Distance: ${leg.totalDistance.text}\n")
+                    }
+                }
+                totalDistance.toString()
+            },
+            "Total Duration" to { directions: DirectionsModel ->
+                val totalDuration = StringBuilder()
+                directions.routes.forEach { route ->
+                    route.legs.forEach { leg ->
+                        totalDuration.append("Total Duration: ${leg.totalDuration.text}\n")
+                    }
+                }
+                totalDuration.toString()
+            },
+            "Step Duration" to { directions: DirectionsModel ->
+                val stepDuration = StringBuilder()
+                directions.routes.forEach { route ->
+                    route.legs.forEach { leg ->
+                        leg.steps.forEach { step ->
+                            stepDuration.append("Step Duration: ${step.stepDuration.text}\n")
+                        }
+                    }
+                }
+                stepDuration.toString()
+            },
+            "HTML Instructions" to { directions: DirectionsModel ->
+                val htmlInstructions = StringBuilder()
+                directions.routes.forEach { route ->
+                    route.legs.forEach { leg ->
+                        leg.steps.forEach { step ->
+                            htmlInstructions.append("HTML Instructions: ${step.htmlInstructions}\n")
+                        }
+                    }
+                }
+                htmlInstructions.toString()
+            }
+        )
+
+        informationOptions.forEach { option ->
+            val checkBox = CheckBox(requireContext()).apply {
+                text = option
+                setOnCheckedChangeListener { _, isChecked ->
+                    if (isChecked) {
+                        // 지금 저장된 directionsResult에서 해당 정보를 검색하여 TextView에 표시
+                        sharedViewModel.directionsResult.value?.let { directions ->
+                            binding.routeDetailsText.text = "${binding.routeDetailsText.text}\n${
+                                informationMap[option]?.invoke(directions)
+                            }"
+                        }
+                    } else {
+                        // 체크가 해제된 경우 해당 정보를 제거... 근데 여기 \n 계속 쌓이는듯
+                        val currentText = binding.routeDetailsText.text.toString()
+                        val newText = currentText.replace(
+                            informationMap[option]?.invoke(sharedViewModel.directionsResult.value!!)
+                                .toString(), ""
+                        )
+                        binding.routeDetailsText.text = newText
+                    }
+                }
+            }
+            optionsLayout.addView(checkBox)
+        }
+    }
 }

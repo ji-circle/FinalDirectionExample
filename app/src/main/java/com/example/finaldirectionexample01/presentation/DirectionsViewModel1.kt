@@ -43,6 +43,8 @@ class DirectionsViewModel1(private val getDirectionsUseCase: GetDirectionsUseCas
     private val _directionExplanations = MutableLiveData<String>()
     val directionExplanations: LiveData<String> get() = _directionExplanations
 
+    private val _shortExplanations = MutableLiveData<String>()
+    val shortExplanations: LiveData<String> get() = _shortExplanations
 
     fun getDirections(origin: String, destination: String, mode: String) {
         Log.d("확인", "$origin, $destination, $mode")
@@ -53,6 +55,7 @@ class DirectionsViewModel1(private val getDirectionsUseCase: GetDirectionsUseCas
                 _directionsResult.value = result.toModel()
                 updatePolyLineWithColors()
                 updateBounds()
+                setShortDirectionsResult()
                 setDirectionsResult()
                 Log.d("확인", "viewmodel: ${_directionsResult.value}")
             } catch (e: Exception) {
@@ -302,6 +305,29 @@ class DirectionsViewModel1(private val getDirectionsUseCase: GetDirectionsUseCas
                 " 이동\n"
             }
         }
+    }
+
+    fun setShortDirectionsResult() {
+        if (_directionsResult.value != null) {
+            formatShortDirectionsExplanations(_directionsResult.value!!)
+        } else {
+            _error.postValue("_direction null")
+            Log.d("확인 setDirections", "null")
+        }
+    }
+    private fun formatShortDirectionsExplanations(directions: DirectionsModel) {
+        val resultText = StringBuilder()
+
+        directions.routes.forEach { route ->
+            route.legs.forEach { leg ->
+                resultText.append("🗺️목적지까지 ${leg.totalDistance.text},\n")
+                resultText.append("앞으로 ${leg.totalDuration.text} 뒤인\n")
+                resultText.append("🕐${leg.totalArrivalTime.text}에 도착 예정입니다.\n")
+                resultText.append("\n")
+            }
+        }
+
+        _shortExplanations.value = resultText.toString()
     }
 
 }

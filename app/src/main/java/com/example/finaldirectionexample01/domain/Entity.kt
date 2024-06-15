@@ -2,9 +2,10 @@ package com.example.finaldirectionexample01.domain
 
 import com.example.finaldirectionexample01.data.model.DirectionsViaWaypoint
 import com.example.finaldirectionexample01.data.model.Fare
-import com.example.finaldirectionexample01.data.model.LatLngLiteral
 import com.example.finaldirectionexample01.data.model.TextValueObject
 import com.example.finaldirectionexample01.data.model.TimeZoneTextValueObject
+import com.google.android.gms.maps.model.LatLng
+import com.google.gson.annotations.SerializedName
 
 data class DirectionsEntity(
     val routes: List<DirectionsRouteEntity>,
@@ -32,20 +33,44 @@ data class DirectionsRouteEntity(
 )
 
 data class BoundsEntity(
-    val northeast: LatLngLiteralEntity,
-    val southwest: LatLngLiteralEntity
+    val northeast: LatLngEntity,
+    val southwest: LatLngEntity
 )
 
-data class LatLngLiteralEntity(
+data class LatLngEntity(
     val lat: Double,
     val lng: Double
 )
 
+data class NortheastEntity(
+    var lat: Double,
+    var lng: Double
+)
+
+data class SouthwestEntity(
+    var lat: Double,
+    var lng: Double
+)
+data class StartLocationEntity(
+    var lat: Double,
+    var lng: Double
+)
+
+data class EndLocationEntity(
+    var lat: Double,
+    var lng: Double
+)
+
+data class LocationEntity(
+    var lat: Double,
+    var lng: Double
+)
+
 data class DirectionsLegEntity(
     val totalEndAddress: String,
-    val totalEndLocation: LatLngLiteralEntity,
+    val totalEndLocation: LatLngEntity,
     val totalStartAddress: String,
-    val totalStartLocation: LatLngLiteralEntity,
+    val totalStartLocation: LatLngEntity,
     val steps: List<DirectionsStepEntity>,
     val trafficSpeedEntry: List<DirectionsTrafficSpeedEntryEntity>,
     val viaWaypoint: List<DirectionsViaWaypointEntity>,
@@ -58,10 +83,10 @@ data class DirectionsLegEntity(
 
 data class DirectionsStepEntity(
     val stepDuration: TextValueObjectEntity,
-    val endLocation: LatLngLiteralEntity,
+    val endLocation: LatLngEntity,
     val htmlInstructions: String,
     val polyline: DirectionsPolylineEntity,
-    val startLocation: LatLngLiteralEntity,
+    val startLocation: LatLngEntity,
     val travelMode: String,
     val distance: TextValueObjectEntity,
     val stepInSteps: List<DirectionsStepEntity>,
@@ -85,7 +110,7 @@ data class DirectionsPolylineEntity(
 )
 
 data class DirectionsTransitStopEntity(
-    val location: LatLngLiteralEntity,
+    val location: LatLngEntity,
     val name: String
 )
 
@@ -119,7 +144,7 @@ data class DirectionsTrafficSpeedEntryEntity(
 )
 
 data class DirectionsViaWaypointEntity(
-    val location: LatLngLiteralEntity,
+    val location: LatLngEntity,
     val stepIndex: Int,
     val stepInterpolation: Number
 )

@@ -128,6 +128,15 @@ import java.util.Locale
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
+    val sharedViewModel: DirectionsViewModel1 by lazy {
+        val appContainer = (application as FinalDirectionApplication).appContainer
+        val directions1Container = appContainer.directions1Container
+        val directionsViewModel1Factory = directions1Container?.directionsViewModel1Factory
+        directionsViewModel1Factory?.let {
+            ViewModelProvider(this, it).get(DirectionsViewModel1::class.java)
+        } ?: throw IllegalStateException("DirectionsViewModel1Factory not initialized properly")
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)

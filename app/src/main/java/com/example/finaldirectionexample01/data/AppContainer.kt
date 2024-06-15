@@ -22,7 +22,9 @@ class AppContainer {
 
 //    val directionsContainer: DirectionsContainer?= null
 
-    var directions1Container : Directions1Container?= null
+    val directions1Container : Directions1Container by lazy {
+        Directions1Container(getDirectionsUseCase)
+    }
     //val directions1Container: Directions1Container? by lazy {
     //    Directions1Container(getDirectionsUseCase)
     //}

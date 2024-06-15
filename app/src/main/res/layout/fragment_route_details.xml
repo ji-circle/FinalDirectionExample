@@ -3,11 +3,41 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:id="@+id/bottomsheetfragment">
+
+    <LinearLayout
+        android:id="@+id/optionsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <!-- 여기에 체크박스들-->
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/routeDetailsTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Routes Details"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/boundsTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Bounds"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/geocodedWaypointsTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Geocoded Waypoints"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/routeDetailsText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Route details will appear here" />
+        android:text="여기에 경로 보여줌" />
 </LinearLayout>

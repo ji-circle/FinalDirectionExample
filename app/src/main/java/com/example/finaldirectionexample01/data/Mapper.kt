@@ -1,11 +1,11 @@
 package com.example.finaldirectionexample01.data
 
-import com.example.finaldirectionexample01.data.model.DirectionsGeocodedWaypoint
-import com.example.finaldirectionexample01.data.model.DirectionsResponse
-import com.example.finaldirectionexample01.data.model.DirectionsRoute
 import com.example.finaldirectionexample01.data.model.Bounds
+import com.example.finaldirectionexample01.data.model.DirectionsGeocodedWaypoint
 import com.example.finaldirectionexample01.data.model.DirectionsLeg
 import com.example.finaldirectionexample01.data.model.DirectionsPolyline
+import com.example.finaldirectionexample01.data.model.DirectionsResponse
+import com.example.finaldirectionexample01.data.model.DirectionsRoute
 import com.example.finaldirectionexample01.data.model.DirectionsStep
 import com.example.finaldirectionexample01.data.model.DirectionsTrafficSpeedEntry
 import com.example.finaldirectionexample01.data.model.DirectionsTransitAgency
@@ -36,7 +36,6 @@ import com.example.finaldirectionexample01.domain.FareEntity
 import com.example.finaldirectionexample01.domain.LatLngEntity
 import com.example.finaldirectionexample01.domain.TextValueObjectEntity
 import com.example.finaldirectionexample01.domain.TimeZoneTextValueObjectEntity
-import com.google.android.gms.maps.model.LatLng
 
 fun DirectionsResponse.toEntity() = DirectionsEntity(
     routes = routes?.map {
@@ -62,7 +61,6 @@ fun DirectionsRoute.toEntity() = DirectionsRouteEntity(
             bounds?.northeast?.lat ?: 0.0, bounds?.northeast?.lng ?: 0.0
         ), southwest = LatLngEntity(0.0, 0.0)
     ),
-    //bounds = bounds?.toEntity() ?: BoundsEntity(),
     copyrights = copyrights ?: "",
     legs = legs?.map {
         it.toEntity()
@@ -76,8 +74,8 @@ fun DirectionsRoute.toEntity() = DirectionsRouteEntity(
 )
 
 fun Bounds.toEntity() = BoundsEntity(
-    northeast = northeast?.toEntity() ?:LatLngEntity(0.0,0.0),
-    southwest = southwest?.toEntity() ?: LatLngEntity(0.0,0.0)
+    northeast = northeast?.toEntity() ?: LatLngEntity(0.0, 0.0),
+    southwest = southwest?.toEntity() ?: LatLngEntity(0.0, 0.0)
 )
 
 fun LatLngLiteral.toEntity() = LatLngEntity(
@@ -87,17 +85,17 @@ fun LatLngLiteral.toEntity() = LatLngEntity(
 
 fun DirectionsLeg.toEntity() = DirectionsLegEntity(
     totalEndAddress = totalEndAddress ?: "",
-    totalEndLocation = totalEndLocation?.toEntity() ?: LatLngEntity(0.0, 0.0), // 수정된 부분
+    totalEndLocation = totalEndLocation?.toEntity() ?: LatLngEntity(0.0, 0.0),
     totalStartAddress = totalStartAddress ?: "",
     totalStartLocation = totalStartLocation?.toEntity() ?: LatLngEntity(
         0.0, 0.0
-    ), // 수정된 부분
+    ),
     steps = steps?.map {
         it.toEntity()
     }.orEmpty(),
     trafficSpeedEntry = trafficSpeedEntry?.map {
         it.toEntity()
-    }.orEmpty(),  // 수정된 부분
+    }.orEmpty(),
     viaWaypoint = viaWaypoint?.map {
         it.toEntity()
     }.orEmpty(),
@@ -105,12 +103,12 @@ fun DirectionsLeg.toEntity() = DirectionsLegEntity(
         text = "",
         timeZone = "",
         value = 0.0
-    ), // 수정된 부분
+    ),
     totalDepartureTime = totalDepartureTime?.toEntity() ?: TimeZoneTextValueObjectEntity(
         text = "",
         timeZone = "",
         value = 0.0
-    ), // 수정된 부분
+    ),
     totalDistance = totalDistance?.toEntity() ?: TextValueObjectEntity(text = "", value = 0.0),
     totalDuration = totalDuration?.toEntity() ?: TextValueObjectEntity(text = "", value = 0.0),
     durationInTraffic = durationInTraffic?.toEntity() ?: TextValueObjectEntity(
@@ -118,21 +116,6 @@ fun DirectionsLeg.toEntity() = DirectionsLegEntity(
         value = 0.0
     )
 )
-
-//fun DirectionsStep.toEntity(): DirectionsStepEntity {
-//    val stepsList = stepInSteps?.map { it.toEntity() } ?: emptyList()
-//    DirectionsStepEntity(
-//        stepDuration = stepDuration?.toEntity() ?: TextValueObjectEntity(),
-//        endLocation = endLocation?.toEntity() ?: LatLngEntity(),
-//        htmlInstructions = htmlInstructions ?: "",
-//        polyline = polyline?.toEntity() ?: DirectionsPolylineEntity(),
-//        startLocation = startLocation?.toEntity() ?: LatLngEntity(),
-//        travelMode = travelMode ?: "",
-//        distance = distance?.toEntity() ?: TextValueObjectEntity(),
-//        stepInSteps = stepsList,
-//        transitDetails = transitDetails?.toEntity() ?: DirectionsTransitDetailsEntity()
-//    )
-//}
 
 fun DirectionsStep.toEntity(): DirectionsStepEntity {
     return DirectionsStepEntity(

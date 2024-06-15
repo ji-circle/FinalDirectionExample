@@ -1,19 +1,17 @@
 package com.example.finaldirectionexample01.presentation
 
 import android.graphics.Color
-import android.graphics.Color.GREEN
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.finaldirectionexample01.R
 import com.example.finaldirectionexample01.domain.usecase.GetDirectionsUseCase
-import com.google.android.gms.maps.model.PolylineOptions
-import kotlinx.coroutines.launch
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.PolylineOptions
 import com.google.maps.android.PolyUtil
+import kotlinx.coroutines.launch
 
 class DirectionsViewModel1(private val getDirectionsUseCase: GetDirectionsUseCase) : ViewModel() {
     private val _directionsResult = MutableLiveData<DirectionsModel>()
@@ -77,10 +75,6 @@ class DirectionsViewModel1(private val getDirectionsUseCase: GetDirectionsUseCas
     fun setUserLocation(location: LatLng) {
         _userLocation.value = location
     }
-
-//    fun setLatLngBounds(bounds: List<LatLng>) {
-//        _latLngBounds.value = bounds
-//    }
 
     private fun updateODM(origin: String, destination: String, mode: String) {
         _origin.value = origin

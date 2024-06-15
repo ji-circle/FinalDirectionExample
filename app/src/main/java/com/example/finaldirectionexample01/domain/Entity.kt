@@ -1,12 +1,5 @@
 package com.example.finaldirectionexample01.domain
 
-import com.example.finaldirectionexample01.data.model.DirectionsViaWaypoint
-import com.example.finaldirectionexample01.data.model.Fare
-import com.example.finaldirectionexample01.data.model.TextValueObject
-import com.example.finaldirectionexample01.data.model.TimeZoneTextValueObject
-import com.google.android.gms.maps.model.LatLng
-import com.google.gson.annotations.SerializedName
-
 data class DirectionsEntity(
     val routes: List<DirectionsRouteEntity>,
     val directionsStatus: String,
@@ -40,30 +33,6 @@ data class BoundsEntity(
 data class LatLngEntity(
     val lat: Double,
     val lng: Double
-)
-
-data class NortheastEntity(
-    var lat: Double,
-    var lng: Double
-)
-
-data class SouthwestEntity(
-    var lat: Double,
-    var lng: Double
-)
-data class StartLocationEntity(
-    var lat: Double,
-    var lng: Double
-)
-
-data class EndLocationEntity(
-    var lat: Double,
-    var lng: Double
-)
-
-data class LocationEntity(
-    var lat: Double,
-    var lng: Double
 )
 
 data class DirectionsLegEntity(
@@ -165,34 +134,3 @@ data class FareEntity(
     val text: String,
     val value: Double
 )
-
-
-
-
-
-
-
-//data class RouteEntity(
-//    val overviewPolyline: String,
-//    val legs: List<LegEntity>,
-//    val summary: String
-//)
-
-//data class LegEntity(
-//    val startAddress: String,
-//    val endAddress: String,
-//    val duration: String,
-//    val steps: List<StepEntity>
-//)
-//
-//data class StepEntity(
-//    val instructions: String,
-//    val duration: String,
-//    val travelMode: String,
-//    val transitDetails: TransitDetailsEntity?
-//)
-//
-//data class TransitDetailsEntity(
-//    val lineName: String,
-//    val vehicleName: String
-//)

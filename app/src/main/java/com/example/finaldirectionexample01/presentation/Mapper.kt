@@ -1,23 +1,5 @@
 package com.example.finaldirectionexample01.presentation
 
-import com.example.finaldirectionexample01.data.model.Bounds
-import com.example.finaldirectionexample01.data.model.DirectionsGeocodedWaypoint
-import com.example.finaldirectionexample01.data.model.DirectionsLeg
-import com.example.finaldirectionexample01.data.model.DirectionsPolyline
-import com.example.finaldirectionexample01.data.model.DirectionsResponse
-import com.example.finaldirectionexample01.data.model.DirectionsRoute
-import com.example.finaldirectionexample01.data.model.DirectionsStep
-import com.example.finaldirectionexample01.data.model.DirectionsTrafficSpeedEntry
-import com.example.finaldirectionexample01.data.model.DirectionsTransitAgency
-import com.example.finaldirectionexample01.data.model.DirectionsTransitDetails
-import com.example.finaldirectionexample01.data.model.DirectionsTransitLine
-import com.example.finaldirectionexample01.data.model.DirectionsTransitStop
-import com.example.finaldirectionexample01.data.model.DirectionsTransitVehicle
-import com.example.finaldirectionexample01.data.model.DirectionsViaWaypoint
-import com.example.finaldirectionexample01.data.model.Fare
-import com.example.finaldirectionexample01.data.model.TextValueObject
-import com.example.finaldirectionexample01.data.model.TimeZoneTextValueObject
-import com.example.finaldirectionexample01.data.toEntity
 import com.example.finaldirectionexample01.domain.BoundsEntity
 import com.example.finaldirectionexample01.domain.DirectionsEntity
 import com.example.finaldirectionexample01.domain.DirectionsGeocodedWaypointEntity
@@ -36,7 +18,6 @@ import com.example.finaldirectionexample01.domain.FareEntity
 import com.example.finaldirectionexample01.domain.LatLngEntity
 import com.example.finaldirectionexample01.domain.TextValueObjectEntity
 import com.example.finaldirectionexample01.domain.TimeZoneTextValueObjectEntity
-import com.google.android.gms.maps.model.LatLng
 
 fun DirectionsEntity.toModel() = DirectionsModel(
     routes = routes.map {
@@ -74,7 +55,7 @@ fun DirectionsRouteEntity.toModel() = DirectionsRouteModel(
 
 fun BoundsEntity.toModel() = BoundsModel(
     northeast = northeast.toModel() ?: LatLngModel(0.0, 0.0),
-    southwest = southwest.toModel()?: LatLngModel(0.0, 0.0)
+    southwest = southwest.toModel() ?: LatLngModel(0.0, 0.0)
 )
 
 fun LatLngEntity.toModel() = LatLngModel(
@@ -92,7 +73,7 @@ fun DirectionsLegEntity.toModel() = DirectionsLegModel(
     }.orEmpty(),
     trafficSpeedEntry = trafficSpeedEntry.map {
         it.toModel()
-    }.orEmpty(),  // 수정된 부분
+    }.orEmpty(),
     viaWaypoint = viaWaypoint.map {
         it.toModel()
     }.orEmpty(),
@@ -100,12 +81,12 @@ fun DirectionsLegEntity.toModel() = DirectionsLegModel(
         text = "",
         timeZone = "",
         value = 0.0
-    ), // 수정된 부분
+    ),
     totalDepartureTime = totalDepartureTime.toModel() ?: TimeZoneTextValueObjectModel(
         text = "",
         timeZone = "",
         value = 0.0
-    ), // 수정된 부분
+    ),
     totalDistance = totalDistance.toModel() ?: TextValueObjectModel(text = "", value = 0.0),
     totalDuration = totalDuration.toModel() ?: TextValueObjectModel(text = "", value = 0.0),
     durationInTraffic = durationInTraffic.toModel() ?: TextValueObjectModel(
@@ -118,10 +99,10 @@ fun DirectionsLegEntity.toModel() = DirectionsLegModel(
 fun DirectionsStepEntity.toModel(): DirectionsStepModel {
     return DirectionsStepModel(
         stepDuration = stepDuration.toModel() ?: TextValueObjectModel(text = "", value = 0.0),
-        endLocation = endLocation.toModel()?: LatLngModel(0.0, 0.0),
+        endLocation = endLocation.toModel() ?: LatLngModel(0.0, 0.0),
         htmlInstructions = htmlInstructions ?: "",
         polyline = polyline.toModel() ?: DirectionsPolylineModel(points = ""),
-        startLocation = startLocation.toModel()?: LatLngModel(0.0, 0.0),
+        startLocation = startLocation.toModel() ?: LatLngModel(0.0, 0.0),
         travelMode = travelMode ?: "",
         distance = distance.toModel() ?: TextValueObjectModel(text = "", value = 0.0),
         stepInSteps = stepInSteps.map { it.toModel() } ?: emptyList(),
@@ -195,31 +176,14 @@ fun DirectionsTransitDetailsEntity.toModel() = DirectionsTransitDetailsModel(
 )
 
 fun DirectionsPolylineEntity.toModel() = DirectionsPolylineModel(
-//  points = points ?: ""
     points
 )
 
 fun DirectionsTransitStopEntity.toModel() = DirectionsTransitStopModel(
-//    location = location?.toModel() ?: LatLngModel(0.0, 0.0),
-//    name = name ?: ""
     location = location.toModel(), name
-    //location = LatLngModel(0.0,0.0), name = "
 )
 
 fun DirectionsTransitLineEntity.toModel() = DirectionsTransitLineModel(
-//    agencies = agencies?.map { it.toModel() } ?: emptyList(),
-//    name = name ?: "",
-//    color = color ?: "",
-//    icon = icon ?: "",
-//    shortName = shortName ?: "",
-//    textColor = textColor ?: "",
-//    url = url ?: "",
-//    vehicle = vehicle?.toModel() ?: DirectionsTransitVehicleModel(
-//        name = "",
-//        type = "",
-//        icon = "",
-//        localIcon = ""
-//    )
     agencies = agencies.map { it.toModel() } ?: emptyList(),
     name,
     color,
@@ -234,33 +198,19 @@ fun DirectionsTransitLineEntity.toModel() = DirectionsTransitLineModel(
 )
 
 fun DirectionsTransitAgencyEntity.toModel() = DirectionsTransitAgencyModel(
-//    name = name ?: "",
-//    phone = phone ?: "",
-//    url = url ?: ""
     name, phone, url
 )
 
 fun DirectionsTransitVehicleEntity.toModel() = DirectionsTransitVehicleModel(
-//    name = name ?: "",
-//    type = type ?: "",
-//    icon = icon ?: "",
-//    localIcon = localIcon ?: ""
     name, type, icon, localIcon
 )
 
 fun DirectionsTrafficSpeedEntryEntity.toModel() = DirectionsTrafficSpeedEntryModel(
-//    offsetMeters = offsetMeters ?: 0.0,
-//    speedCategory = speedCategory ?: ""
     offsetMeters, speedCategory
 )
 
 fun DirectionsViaWaypointEntity.toModel() = DirectionsViaWaypointModel(
-//    location = location.toModel() ?: LatLngModel(0.0, 0.0),
-//    stepIndex = stepIndex ?: 0,
-//    stepInterpolation = stepInterpolation ?: 0
-//
-//    location = location.toModel(), stepIndex, stepInterpolation
-    location= location.toModel(), stepIndex, stepInterpolation
+    location = location.toModel(), stepIndex, stepInterpolation
 )
 
 fun TimeZoneTextValueObjectEntity.toModel() = TimeZoneTextValueObjectModel(

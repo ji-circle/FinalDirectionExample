@@ -1,12 +1,6 @@
 package com.example.finaldirectionexample01.data.model
 
-import android.os.Parcelable
-import com.example.finaldirectionexample01.domain.DirectionsEntity
-import com.example.finaldirectionexample01.domain.DirectionsRouteEntity
-import com.google.android.gms.maps.model.LatLng
-import kotlinx.parcelize.Parcelize
 import com.google.gson.annotations.SerializedName
-import java.io.Serial
 
 
 data class DirectionsResponse(
@@ -40,28 +34,16 @@ data class Bounds(
     @SerializedName("southwest") val southwest: LatLngLiteral?
 )
 
-data class Northeast(
-    @SerializedName("lat") val lat: Double?,
-    @SerializedName("lng") val lng: Double?
-)
-
-data class Southwest(
-    @SerializedName("lat") val lat: Double?,
-    @SerializedName("lng") val lng: Double?
-)
-
 data class LatLngLiteral(
     @SerializedName("lat") val lat: Double,
-    @SerializedName("lng") val lng: Double //원래 number이었음... longtitude in decimal degrees
+    @SerializedName("lng") val lng: Double
 
 )
 
 data class DirectionsLeg(
     @SerializedName("end_address") val totalEndAddress: String?,
-//    @SerializedName("end_location") val totalEndLocation: EndLocation?,
     @SerializedName("end_location") val totalEndLocation: LatLngLiteral?,
     @SerializedName("start_address") val totalStartAddress: String?,
-//    @SerializedName("start_location") val totalStartLocation: StartLocation?,
     @SerializedName("start_location") val totalStartLocation: LatLngLiteral?,
     @SerializedName("steps") val steps: List<DirectionsStep>?,
     @SerializedName("traffic_speed_entry") val trafficSpeedEntry: List<DirectionsTrafficSpeedEntry>?,
@@ -73,23 +55,11 @@ data class DirectionsLeg(
     @SerializedName("duration_in_traffic") val durationInTraffic: TextValueObject?
 )
 
-data class EndLocation(
-    @SerializedName("lat") val lat: Double?,
-    @SerializedName("lng") val lng: Double?
-)
-
-data class StartLocation(
-    @SerializedName("lat") val lat: Double?,
-    @SerializedName("lng") val lng: Double?
-)
-
 data class DirectionsStep(
     @SerializedName("duration") val stepDuration: TextValueObject?,
-//    @SerializedName("end_location") val endLocation:EndLocation?,
     @SerializedName("end_location") val endLocation:LatLngLiteral?,
     @SerializedName("html_instructions") val htmlInstructions: String?,
     @SerializedName("polyline") val polyline: DirectionsPolyline?,
-//    @SerializedName("start_location") val startLocation: StartLocation?,
     @SerializedName("start_location") val startLocation: LatLngLiteral?,
     @SerializedName("travel_mode") val travelMode: String?,
     @SerializedName("distance") val distance: TextValueObject?,
@@ -115,14 +85,8 @@ data class DirectionsPolyline(
 )
 
 data class DirectionsTransitStop(
-//    @SerializedName("location") val location: Location?,
     @SerializedName("location") val location: LatLngLiteral?,
     @SerializedName("name") val name: String?
-)
-
-data class Location(
-    @SerializedName("lat") val lat: Double?,
-    @SerializedName("lng") val lng: Double?
 )
 
 data class DirectionsTransitLine(
@@ -155,7 +119,6 @@ data class DirectionsTrafficSpeedEntry(
 )
 
 data class DirectionsViaWaypoint(
-//    @SerializedName("location") val location: Location?,
     @SerializedName("location") val location: LatLngLiteral?,
     @SerializedName("step_index") val stepIndex: Int?,
     @SerializedName("step_interpolation") val stepInterpolation: Double?

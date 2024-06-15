@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckBox
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import com.example.finaldirectionexample01.FinalDirectionApplication
@@ -47,25 +46,9 @@ class RouteDetailsBottomSheet : BottomSheetDialogFragment() {
         )
 
         binding.routeDetailsText.text = sharedViewModel.directionExplanations.value
-//        sharedViewModel.directionsResult.observe(viewLifecycleOwner, { directions ->
-//            directions?.let { directions ->
-//                val resultText = StringBuilder()
-//                directions.routes.forEach { route ->
-//                    route.legs.forEach { leg ->
-//                        resultText.append("Total Distance: ${leg.totalDistance.text}\n")
-//                        resultText.append("Total Duration: ${leg.totalDuration.text}\n")
-//                        leg.steps.forEach { step ->
-//                            resultText.append("Step:\n")
-//                            resultText.append("  Instruction: ${step.htmlInstructions}\n")
-//                            resultText.append("  Duration: ${step.stepDuration.text}\n")
-//                            resultText.append("  Distance: ${step.distance.text}\n")
-//                            resultText.append("  Travel Mode: ${step.travelMode}\n")
-//                        }
-//                    }
-//                }
-//                binding.routeDetailsText.text = resultText.toString()
-//            }
-//        })
+        // sharedViewModel.directionExplanations.observe(viewLifecycleOwner, Observer{
+        //            binding.resultTextView.text = it
+        //        }) 이거랑 차이...? 소요 시간?
 
         sharedViewModel.error.observe(viewLifecycleOwner) { errorMessage ->
             Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()

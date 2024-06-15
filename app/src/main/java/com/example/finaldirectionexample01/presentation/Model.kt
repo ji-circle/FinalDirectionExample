@@ -1,7 +1,5 @@
 package com.example.finaldirectionexample01.presentation
 
-import com.google.android.gms.maps.model.LatLng
-
 
 data class DirectionsModel(
     val routes: List<DirectionsRouteModel>,
@@ -137,32 +135,3 @@ data class FareModel(
     val text: String,
     val value: Double
 )
-
-
-
-
-
-//data class Route(
-//    val overviewPolyline: String,
-//    val legs: List<Leg>,
-//    val summary: String
-//)
-//
-//data class Leg(
-//    val startAddress: String,
-//    val endAddress: String,
-//    val duration: String,
-//    val steps: List<Step>
-//)
-//
-//data class Step(
-//    val instructions: String,
-//    val duration: String,
-//    val travelMode: String,
-//    val transitDetails: TransitDetails?
-//)
-//
-//data class TransitDetails(
-//    val lineName: String,
-//    val vehicleName: String
-//)

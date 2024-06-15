@@ -1,46 +1,30 @@
 package com.example.finaldirectionexample01.presentation
 
 import android.Manifest
-import android.content.pm.PackageManager
-import android.graphics.Color
-import android.location.Location
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.example.finaldirectionexample01.FinalDirectionApplication
 import com.example.finaldirectionexample01.R
 import com.example.finaldirectionexample01.data.AppContainer
-import com.example.finaldirectionexample01.databinding.FragmentDirectionsBinding
 import com.example.finaldirectionexample01.databinding.FragmentMapBinding
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationResult
-import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
-import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.gms.maps.model.Polyline
-import com.google.android.gms.maps.model.PolylineOptions
 
 class MapFragment : Fragment(), OnMapReadyCallback {
     private var _binding: FragmentMapBinding? = null
@@ -49,17 +33,14 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private var googleMap: GoogleMap? = null
 
     private var isUserInteracting = false
-    private var shouldFocusMapOnBounds = true
-
-    private var polylinePl: Polyline? = null
 
     private val handler = Handler(Looper.getMainLooper())
     private var checkBoundsRunnable: Runnable? = null
 
 
     private lateinit var locationPermission: ActivityResultLauncher<Array<String>>
-    private lateinit var locationCallback: LocationCallback
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
+//    private lateinit var locationCallback: LocationCallback
+//    private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     private val appContainer: AppContainer by lazy {
         (requireActivity().application as FinalDirectionApplication).appContainer
@@ -76,7 +57,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Register the permissions result callback
         locationPermission = registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions()
         ) { results ->
@@ -113,10 +93,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         super.onViewCreated(view, savedInstanceState)
 
         initializeMapView()
-
         setupClickListener()
-
-
     }
 
     private fun setupClickListener() {
@@ -138,18 +115,12 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         googleMap?.setOnCameraMoveStartedListener { reason ->
             if (reason == GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE) {
                 isUserInteracting = true
-                //shouldFocusMapOnBounds = false
                 // 사용자가 지도를 움직이기 시작하면 기존의 Runnable 제거
                 checkBoundsRunnable?.let { handler.removeCallbacks(it) }
             }
         }
 
         googleMap?.setOnCameraIdleListener {
-//            if (!isUserInteracting&& shouldFocusMapOnBounds) {
-//                focusMapOnBounds()
-//            } else {
-//                isUserInteracting = false
-//            }
             if (isUserInteracting) {
                 isUserInteracting = false
 
@@ -250,18 +221,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         googleMap = myMap
         setLine(myMap)
         setMarker(myMap)
-//
-
 
         setupMapListeners()
-        // 사용자 위치 설정
-//        val userLocation = LatLng(/* 위도 */, /* 경도 */)
-//        sharedViewModel.setUserLocation(userLocation)
-        //
-        // 사용자 위치 설정 (예시로 현재 위치를 임의의 값으로 설정)
-        //val userLocation = LatLng(37.5665, 126.9780)  // 서울 시청 좌표
-        //sharedViewModel.setUserLocation(userLocation)
-
     }
 
 

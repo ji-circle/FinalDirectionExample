@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import android.graphics.Color
 import android.location.Location
 import android.os.Bundle
+import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -51,6 +52,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private var shouldFocusMapOnBounds = true
 
     private var polylinePl: Polyline? = null
+
+    private val handler = Handler(Looper.getMainLooper())
+    private var checkBoundsRunnable: Runnable? = null
 
 
     private lateinit var locationPermission: ActivityResultLauncher<Array<String>>
@@ -145,11 +149,14 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         }
 
     }
+
     private fun setupMapListeners() {
         googleMap?.setOnCameraMoveStartedListener { reason ->
             if (reason == GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE) {
                 isUserInteracting = true
                 //shouldFocusMapOnBounds = false
+                // 사용자가 지도를 움직이기 시작하면 기존의 Runnable 제거
+                checkBoundsRunnable?.let { handler.removeCallbacks(it) }
             }
         }
 
@@ -160,22 +167,30 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 //                isUserInteracting = false
 //            }
             if (isUserInteracting) {
-                val currentBounds = googleMap!!.projection.visibleRegion.latLngBounds
-
-                // 경로를 포함하는 영역 계산하여 지도의 중심을 이동
-                val latLngBounds = LatLngBounds.builder()
-                sharedViewModel.latLngBounds.value?.forEach {
-                    latLngBounds.include(LatLng(it.lat, it.lng))
-                }
-
-                val routeBounds = latLngBounds.build()
-                if (!currentBounds.contains(routeBounds.northeast) || !currentBounds.contains(routeBounds.southwest)) {
-                    focusMapOnBounds()
-                }
                 isUserInteracting = false
+
+                checkBoundsRunnable = Runnable {
+                    val currentBounds = googleMap!!.projection.visibleRegion.latLngBounds
+
+                    // 경로를 포함하는 영역 계산하여 지도의 중심을 이동
+                    val latLngBounds = LatLngBounds.builder()
+                    sharedViewModel.latLngBounds.value?.forEach {
+                        latLngBounds.include(LatLng(it.lat, it.lng))
+                    }
+
+                    val routeBounds = latLngBounds.build()
+                    if (!currentBounds.contains(routeBounds.northeast) || !currentBounds.contains(
+                            routeBounds.southwest
+                        )
+                    ) {
+                        focusMapOnBounds()
+                    }
+                }
+                handler.postDelayed(checkBoundsRunnable!!, 3000)  // 3초 지연
             }
         }
     }
+
     private fun initializeMapView() {
         val mapFragment = childFragmentManager.findFragmentById(R.id.mapView) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
@@ -218,17 +233,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         myMap.addMarker(markerDestination)
 
         focusMapOnBounds()
-//        // 경로를 포함하는 영역 계산하여 지도의 중심을 이동
-//        val latLngBounds = LatLngBounds.builder()
-//        sharedViewModel.latLngBounds.value?.forEach {
-//            latLngBounds.include(LatLng(it.lat, it.lng))
-//        }
-//        val bounds = latLngBounds.build()
-//        val padding = 100
-//        googleMap?.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding))
     }
 
-    private fun focusMapOnBounds(){
+    private fun focusMapOnBounds() {
         // 경로를 포함하는 영역 계산하여 지도의 중심을 이동
         val latLngBounds = LatLngBounds.builder()
         sharedViewModel.latLngBounds.value?.forEach {
@@ -240,6 +247,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         val padding = 100
         googleMap?.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding))
     }
+
     private fun setLine(myMap: GoogleMap) {
         googleMap = myMap
         sharedViewModel.polyLine.observe(viewLifecycleOwner, Observer { polylines ->
@@ -269,8 +277,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         //val userLocation = LatLng(37.5665, 126.9780)  // 서울 시청 좌표
         //sharedViewModel.setUserLocation(userLocation)
 
-//        // 지도 초기 포커스 설정
-//        focusMapOnBounds()
     }
 
 //    private fun updateLocation() {

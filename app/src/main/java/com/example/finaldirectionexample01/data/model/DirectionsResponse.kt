@@ -1,11 +1,6 @@
 package com.example.finaldirectionexample01.data.model
 
-import android.os.Parcelable
-import com.example.finaldirectionexample01.domain.DirectionsEntity
-import com.example.finaldirectionexample01.domain.DirectionsRouteEntity
-import kotlinx.parcelize.Parcelize
 import com.google.gson.annotations.SerializedName
-import java.io.Serial
 
 
 data class DirectionsResponse(
@@ -40,8 +35,8 @@ data class Bounds(
 )
 
 data class LatLngLiteral(
-    @SerializedName("lat") val lat: Double?,
-    @SerializedName("lng") val lng: Double? //원래 number이었음... longtitude in decimal degrees
+    @SerializedName("lat") val lat: Double,
+    @SerializedName("lng") val lng: Double
 
 )
 

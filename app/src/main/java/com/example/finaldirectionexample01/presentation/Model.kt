@@ -27,20 +27,20 @@ data class DirectionsRouteModel(
 )
 
 data class BoundsModel(
-    val northeast: LatLngLiteralModel,
-    val southwest: LatLngLiteralModel
+    val northeast: LatLngModel,
+    val southwest: LatLngModel
 )
 
-data class LatLngLiteralModel(
+data class LatLngModel(
     val lat: Double,
     val lng: Double
 )
 
 data class DirectionsLegModel(
     val totalEndAddress: String,
-    val totalEndLocation: LatLngLiteralModel,
+    val totalEndLocation: LatLngModel,
     val totalStartAddress: String,
-    val totalStartLocation: LatLngLiteralModel,
+    val totalStartLocation: LatLngModel,
     val steps: List<DirectionsStepModel>,
     val trafficSpeedEntry: List<DirectionsTrafficSpeedEntryModel>,
     val viaWaypoint: List<DirectionsViaWaypointModel>,
@@ -53,10 +53,10 @@ data class DirectionsLegModel(
 
 data class DirectionsStepModel(
     val stepDuration: TextValueObjectModel,
-    val endLocation: LatLngLiteralModel,
+    val endLocation: LatLngModel,
     val htmlInstructions: String,
     val polyline: DirectionsPolylineModel,
-    val startLocation: LatLngLiteralModel,
+    val startLocation: LatLngModel,
     val travelMode: String,
     val distance: TextValueObjectModel,
     val stepInSteps: List<DirectionsStepModel>,
@@ -80,7 +80,7 @@ data class DirectionsPolylineModel(
 )
 
 data class DirectionsTransitStopModel(
-    val location: LatLngLiteralModel,
+    val location: LatLngModel,
     val name: String
 )
 
@@ -114,7 +114,7 @@ data class DirectionsTrafficSpeedEntryModel(
 )
 
 data class DirectionsViaWaypointModel(
-    val location: LatLngLiteralModel,
+    val location: LatLngModel,
     val stepIndex: Int,
     val stepInterpolation: Number
 )
@@ -135,32 +135,3 @@ data class FareModel(
     val text: String,
     val value: Double
 )
-
-
-
-
-
-//data class Route(
-//    val overviewPolyline: String,
-//    val legs: List<Leg>,
-//    val summary: String
-//)
-//
-//data class Leg(
-//    val startAddress: String,
-//    val endAddress: String,
-//    val duration: String,
-//    val steps: List<Step>
-//)
-//
-//data class Step(
-//    val instructions: String,
-//    val duration: String,
-//    val travelMode: String,
-//    val transitDetails: TransitDetails?
-//)
-//
-//data class TransitDetails(
-//    val lineName: String,
-//    val vehicleName: String
-//)

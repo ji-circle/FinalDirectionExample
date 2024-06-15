@@ -1,24 +1,5 @@
 package com.example.finaldirectionexample01.presentation
 
-import com.example.finaldirectionexample01.data.model.Bounds
-import com.example.finaldirectionexample01.data.model.DirectionsGeocodedWaypoint
-import com.example.finaldirectionexample01.data.model.DirectionsLeg
-import com.example.finaldirectionexample01.data.model.DirectionsPolyline
-import com.example.finaldirectionexample01.data.model.DirectionsResponse
-import com.example.finaldirectionexample01.data.model.DirectionsRoute
-import com.example.finaldirectionexample01.data.model.DirectionsStep
-import com.example.finaldirectionexample01.data.model.DirectionsTrafficSpeedEntry
-import com.example.finaldirectionexample01.data.model.DirectionsTransitAgency
-import com.example.finaldirectionexample01.data.model.DirectionsTransitDetails
-import com.example.finaldirectionexample01.data.model.DirectionsTransitLine
-import com.example.finaldirectionexample01.data.model.DirectionsTransitStop
-import com.example.finaldirectionexample01.data.model.DirectionsTransitVehicle
-import com.example.finaldirectionexample01.data.model.DirectionsViaWaypoint
-import com.example.finaldirectionexample01.data.model.Fare
-import com.example.finaldirectionexample01.data.model.LatLngLiteral
-import com.example.finaldirectionexample01.data.model.TextValueObject
-import com.example.finaldirectionexample01.data.model.TimeZoneTextValueObject
-import com.example.finaldirectionexample01.data.toEntity
 import com.example.finaldirectionexample01.domain.BoundsEntity
 import com.example.finaldirectionexample01.domain.DirectionsEntity
 import com.example.finaldirectionexample01.domain.DirectionsGeocodedWaypointEntity
@@ -34,7 +15,7 @@ import com.example.finaldirectionexample01.domain.DirectionsTransitStopEntity
 import com.example.finaldirectionexample01.domain.DirectionsTransitVehicleEntity
 import com.example.finaldirectionexample01.domain.DirectionsViaWaypointEntity
 import com.example.finaldirectionexample01.domain.FareEntity
-import com.example.finaldirectionexample01.domain.LatLngLiteralEntity
+import com.example.finaldirectionexample01.domain.LatLngEntity
 import com.example.finaldirectionexample01.domain.TextValueObjectEntity
 import com.example.finaldirectionexample01.domain.TimeZoneTextValueObjectEntity
 
@@ -58,12 +39,8 @@ fun DirectionsGeocodedWaypointEntity.toModel() = DirectionsGeocodedWaypointModel
 
 fun DirectionsRouteEntity.toModel() = DirectionsRouteModel(
     bounds = bounds.toModel() ?: BoundsModel(
-        northeast = LatLngLiteralModel(
-            lat = 0.0,
-            lng = 0.0
-        ), southwest = LatLngLiteralModel(lat = 0.0, lng = 0.0)
+        LatLngModel(0.0, 0.0), LatLngModel(0.0, 0.0)
     ),
-    //bounds = bounds?.toModel() ?: BoundsModel(),
     copyrights = copyrights ?: "",
     legs = legs.map {
         it.toModel()
@@ -77,32 +54,26 @@ fun DirectionsRouteEntity.toModel() = DirectionsRouteModel(
 )
 
 fun BoundsEntity.toModel() = BoundsModel(
-    northeast = northeast.toModel() ?: LatLngLiteralModel(lat = 0.0, lng = 0.0),
-    southwest = southwest.toModel() ?: LatLngLiteralModel(lat = 0.0, lng = 0.0)
+    northeast = northeast.toModel() ?: LatLngModel(0.0, 0.0),
+    southwest = southwest.toModel() ?: LatLngModel(0.0, 0.0)
 )
 
-fun LatLngLiteralEntity.toModel() = LatLngLiteralModel(
+fun LatLngEntity.toModel() = LatLngModel(
     lat = lat ?: 0.0,
     lng = lng ?: 0.0
 )
 
 fun DirectionsLegEntity.toModel() = DirectionsLegModel(
     totalEndAddress = totalEndAddress ?: "",
-    totalEndLocation = totalEndLocation.toModel() ?: LatLngLiteralModel(
-        lat = 0.0,
-        lng = 0.0
-    ), // 수정된 부분
+    totalEndLocation = totalEndLocation.toModel(),
     totalStartAddress = totalStartAddress ?: "",
-    totalStartLocation = totalStartLocation.toModel() ?: LatLngLiteralModel(
-        lat = 0.0,
-        lng = 0.0
-    ), // 수정된 부분
+    totalStartLocation = totalStartLocation.toModel(),
     steps = steps.map {
         it.toModel()
     }.orEmpty(),
     trafficSpeedEntry = trafficSpeedEntry.map {
         it.toModel()
-    }.orEmpty(),  // 수정된 부분
+    }.orEmpty(),
     viaWaypoint = viaWaypoint.map {
         it.toModel()
     }.orEmpty(),
@@ -110,12 +81,12 @@ fun DirectionsLegEntity.toModel() = DirectionsLegModel(
         text = "",
         timeZone = "",
         value = 0.0
-    ), // 수정된 부분
+    ),
     totalDepartureTime = totalDepartureTime.toModel() ?: TimeZoneTextValueObjectModel(
         text = "",
         timeZone = "",
         value = 0.0
-    ), // 수정된 부분
+    ),
     totalDistance = totalDistance.toModel() ?: TextValueObjectModel(text = "", value = 0.0),
     totalDuration = totalDuration.toModel() ?: TextValueObjectModel(text = "", value = 0.0),
     durationInTraffic = durationInTraffic.toModel() ?: TextValueObjectModel(
@@ -128,21 +99,21 @@ fun DirectionsLegEntity.toModel() = DirectionsLegModel(
 fun DirectionsStepEntity.toModel(): DirectionsStepModel {
     return DirectionsStepModel(
         stepDuration = stepDuration.toModel() ?: TextValueObjectModel(text = "", value = 0.0),
-        endLocation = endLocation.toModel() ?: LatLngLiteralModel(lat = 0.0, lng = 0.0),
+        endLocation = endLocation.toModel() ?: LatLngModel(0.0, 0.0),
         htmlInstructions = htmlInstructions ?: "",
         polyline = polyline.toModel() ?: DirectionsPolylineModel(points = ""),
-        startLocation = startLocation.toModel() ?: LatLngLiteralModel(lat = 0.0, lng = 0.0),
+        startLocation = startLocation.toModel() ?: LatLngModel(0.0, 0.0),
         travelMode = travelMode ?: "",
         distance = distance.toModel() ?: TextValueObjectModel(text = "", value = 0.0),
         stepInSteps = stepInSteps.map { it.toModel() } ?: emptyList(),
         transitDetails = transitDetails.toModel() ?: DirectionsTransitDetailsModel(
             arrivalStop = DirectionsTransitStopModel(
-                location = LatLngLiteralModel(lat = 0.0, lng = 0.0),
+                location = LatLngModel(0.0, 0.0),
                 name = ""
             ),
             arrivalTime = TimeZoneTextValueObjectModel(text = "", timeZone = "", value = 0.0),
             departureStop = DirectionsTransitStopModel(
-                location = LatLngLiteralModel(lat = 0.0, lng = 0.0),
+                location = LatLngModel(0.0, 0.0),
                 name = ""
             ),
             departureTime = TimeZoneTextValueObjectModel(text = "", timeZone = "", value = 0.0),
@@ -169,10 +140,9 @@ fun DirectionsStepEntity.toModel(): DirectionsStepModel {
     )
 }
 
-
 fun DirectionsTransitDetailsEntity.toModel() = DirectionsTransitDetailsModel(
     arrivalStop = arrivalStop.toModel() ?: DirectionsTransitStopModel(
-        location = LatLngLiteralModel(lat = 0.0, lng = 0.0),
+        location = LatLngModel(0.0, 0.0),
         name = ""
     ),
     arrivalTime = arrivalTime.toModel() ?: TimeZoneTextValueObjectModel(
@@ -181,7 +151,7 @@ fun DirectionsTransitDetailsEntity.toModel() = DirectionsTransitDetailsModel(
         value = 0.0
     ),
     departureStop = departureStop.toModel() ?: DirectionsTransitStopModel(
-        location = LatLngLiteralModel(lat = 0.0, lng = 0.0),
+        location = LatLngModel(0.0, 0.0),
         name = ""
     ),
     departureTime = departureTime.toModel() ?: TimeZoneTextValueObjectModel(
@@ -206,30 +176,14 @@ fun DirectionsTransitDetailsEntity.toModel() = DirectionsTransitDetailsModel(
 )
 
 fun DirectionsPolylineEntity.toModel() = DirectionsPolylineModel(
-//  points = points ?: ""
     points
 )
 
 fun DirectionsTransitStopEntity.toModel() = DirectionsTransitStopModel(
-//    location = location?.toModel() ?: LatLngLiteralModel(lat = 0.0, lng = 0.0),
-//    name = name ?: ""
-    location = location.toModel()?: LatLngLiteralModel(lat = 0.0, lng = 0.0), name
+    location = location.toModel(), name
 )
 
 fun DirectionsTransitLineEntity.toModel() = DirectionsTransitLineModel(
-//    agencies = agencies?.map { it.toModel() } ?: emptyList(),
-//    name = name ?: "",
-//    color = color ?: "",
-//    icon = icon ?: "",
-//    shortName = shortName ?: "",
-//    textColor = textColor ?: "",
-//    url = url ?: "",
-//    vehicle = vehicle?.toModel() ?: DirectionsTransitVehicleModel(
-//        name = "",
-//        type = "",
-//        icon = "",
-//        localIcon = ""
-//    )
     agencies = agencies.map { it.toModel() } ?: emptyList(),
     name,
     color,
@@ -244,31 +198,18 @@ fun DirectionsTransitLineEntity.toModel() = DirectionsTransitLineModel(
 )
 
 fun DirectionsTransitAgencyEntity.toModel() = DirectionsTransitAgencyModel(
-//    name = name ?: "",
-//    phone = phone ?: "",
-//    url = url ?: ""
     name, phone, url
 )
 
 fun DirectionsTransitVehicleEntity.toModel() = DirectionsTransitVehicleModel(
-//    name = name ?: "",
-//    type = type ?: "",
-//    icon = icon ?: "",
-//    localIcon = localIcon ?: ""
     name, type, icon, localIcon
 )
 
 fun DirectionsTrafficSpeedEntryEntity.toModel() = DirectionsTrafficSpeedEntryModel(
-//    offsetMeters = offsetMeters ?: 0.0,
-//    speedCategory = speedCategory ?: ""
     offsetMeters, speedCategory
 )
 
 fun DirectionsViaWaypointEntity.toModel() = DirectionsViaWaypointModel(
-//    location = location.toModel() ?: LatLngLiteralModel(lat = 0.0, lng = 0.0),
-//    stepIndex = stepIndex ?: 0,
-//    stepInterpolation = stepInterpolation ?: 0
-//
     location = location.toModel(), stepIndex, stepInterpolation
 )
 

@@ -2,16 +2,15 @@ package com.example.finaldirectionexample01.api
 
 import com.example.finaldirectionexample01.data.network.DirectionsApiService
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
-import okhttp3.logging.HttpLoggingInterceptor
-import com.google.gson.Gson
 
 
 object NetworkClient {
 
-    const val API_KEY = "AIzaSyBqe8TQyjF1ndxlzGoZ6GYiWokc8Mi-77U"
+    //const val API_KEY = "AIzaSyBqe8TQyjF1ndxlzGoZ6GYiWokc8Mi-77U"
 
     private val okHttpClient by lazy {
         createOkHttpClient()

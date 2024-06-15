@@ -1,37 +1,49 @@
 package com.example.finaldirectionexample01
 
-import android.app.AlarmManager
-import android.app.PendingIntent
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.example.finaldirectionexample01.data.AppContainer
-import com.example.finaldirectionexample01.data.Directions1Container
-import com.example.finaldirectionexample01.data.DirectionsRepositoryImpl
 import com.example.finaldirectionexample01.databinding.ActivityMainBinding
-import com.example.finaldirectionexample01.domain.usecase.GetDirectionsUseCase
 import com.example.finaldirectionexample01.presentation.DirectionsFragment
-//import com.example.finaldirectionexample01.presentation.DirectionsViewModel
 import com.example.finaldirectionexample01.presentation.DirectionsViewModel1
-//import com.example.finaldirectionexample01.presentation.DirectionsViewModelFactory
-//import com.example.finaldirectionexample01.presentation.RouteBottomSheetFragment
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.PolylineOptions
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+
+class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
+
+    val sharedViewModel: DirectionsViewModel1 by lazy {
+        val appContainer = (application as FinalDirectionApplication).appContainer
+        val directions1Container = appContainer.directions1Container
+        val directionsViewModel1Factory = directions1Container?.directionsViewModel1Factory
+        directionsViewModel1Factory?.let {
+            ViewModelProvider(this, it).get(DirectionsViewModel1::class.java)
+        } ?: throw IllegalStateException("DirectionsViewModel1Factory not initialized properly")
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        enableEdgeToEdge()
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+
+
+        }
+
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, DirectionsFragment())
+                .commit()
+        }
+
+    }
+}
+
 
 //class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 //    private lateinit var binding: ActivityMainBinding
@@ -124,30 +136,3 @@ import java.util.Locale
 //        alarmManager.setExact(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent)
 //    }
 //}
-
-class MainActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMainBinding
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        enableEdgeToEdge()
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-
-
-        }
-
-        if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, DirectionsFragment())
-                .commit()
-        }
-
-
-
-    }
-}

@@ -6,27 +6,51 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <EditText
-        android:id="@+id/originEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter origin" />
 
     <EditText
         android:id="@+id/destinationEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter destination" />
+        android:hint="목적지" />
 
-    <Button
-        android:id="@+id/searchButton"
-        android:layout_width="wrap_content"
+    <EditText
+        android:id="@+id/typeEditText"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Search" />
+        android:hint="이동 방법: transit, driving, walking, bicycling..." />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/searchButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Search" />
+
+
+        <Button
+            android:id="@+id/btnBottomSheet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="bottomSheet"
+            android:visibility="invisible"/>
+
+        <Button
+            android:id="@+id/btnMap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            android:text="showMap"/>
+
+    </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         android:paddingTop="16dp">
 
         <TextView

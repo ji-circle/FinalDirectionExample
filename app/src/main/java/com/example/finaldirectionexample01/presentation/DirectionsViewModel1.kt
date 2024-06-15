@@ -39,6 +39,10 @@ class DirectionsViewModel1(private val getDirectionsUseCase: GetDirectionsUseCas
     private val _latLngBounds = MutableLiveData<List<LatLngModel>>()
     val latLngBounds: LiveData<List<LatLngModel>> get() = _latLngBounds
 
+    private val _userLocation = MutableLiveData<LatLngModel>()
+    val userLocation: LiveData<LatLngModel> get() = _userLocation
+
+
     fun getDirections(origin: String, destination: String, mode: String) {
         Log.d("확인", "$origin, $destination, $mode")
         viewModelScope.launch {
@@ -65,6 +69,14 @@ class DirectionsViewModel1(private val getDirectionsUseCase: GetDirectionsUseCas
             },
         )
     }
+
+    fun setUserLocation(location: LatLngModel) {
+        _userLocation.value = location
+    }
+
+//    fun setLatLngBounds(bounds: List<LatLng>) {
+//        _latLngBounds.value = bounds
+//    }
 
     private fun updateODM(origin: String, destination: String, mode: String) {
         _origin.value = origin

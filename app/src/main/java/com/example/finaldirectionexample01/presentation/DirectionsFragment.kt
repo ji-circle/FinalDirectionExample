@@ -53,7 +53,7 @@ class DirectionsFragment : Fragment() {
         binding.searchButton.setOnClickListener {
             val origin = binding.originEditText.text.toString()
             val destination = binding.destinationEditText.text.toString()
-            val mode = "transit" //이거 스피너로 바꾸기
+            val mode = binding.typeEditText.text.toString()?:"transit" //이거 스피너로 바꾸기
             sharedViewModel.getDirections(origin, destination, mode)
             binding.btnBottomSheet.isVisible = true
             binding.btnMap.isVisible = true

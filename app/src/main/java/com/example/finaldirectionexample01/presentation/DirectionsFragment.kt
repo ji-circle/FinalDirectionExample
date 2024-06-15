@@ -36,7 +36,6 @@ class DirectionsFragment : Fragment() {
     private val LOCATION_PERMISSION_REQUEST_CODE = 1
 
 
-
     private val appContainer: AppContainer by lazy {
         (requireActivity().application as FinalDirectionApplication).appContainer
     }
@@ -82,8 +81,8 @@ class DirectionsFragment : Fragment() {
                 sharedViewModel.getDirections(origin, destination, mode)
                 binding.btnBottomSheet.isVisible = true
                 binding.btnMap.isVisible = true
-            }else{
-                Log.d("확인 에러발생","origin null")
+            } else {
+                Log.d("확인 에러발생", "origin null")
             }
         }
 
@@ -99,27 +98,64 @@ class DirectionsFragment : Fragment() {
                 .commit()
         }
 
-        sharedViewModel.directionsResult.observe(viewLifecycleOwner, { directions ->
-            directions?.let { directions ->
-                val resultText = StringBuilder()
-                directions.routes.forEach { route ->
-                    route.legs.forEach { leg ->
-                        resultText.append("Total Distance: ${leg.totalDistance.text}\n")
-                        resultText.append("Total Duration: ${leg.totalDuration.text}\n")
-                        leg.steps.forEach { step ->
-                            resultText.append("Step:\n")
-                            resultText.append("  Instruction: ${step.htmlInstructions}\n")
-                            resultText.append("  Duration: ${step.stepDuration.text}\n")
-                            resultText.append("  Distance: ${step.distance.text}\n")
-                            resultText.append("  Travel Mode: ${step.travelMode}\n")
-                            //...
-                        }
-                    }
-                }
-                // TextView
-                binding.resultTextView.text = resultText.toString()
-            }
-        })
+        binding.resultTextView.text = sharedViewModel.directionExplanations.value
+//        sharedViewModel.directionsResult.observe(viewLifecycleOwner, { directions ->
+//            directions?.let { directions ->
+//                val resultText = StringBuilder()
+//                directions.routes.forEach { route ->
+//                    route.legs.forEach { leg ->
+//                        resultText.append("🗺️목적지까지 ${leg.totalDistance.text},\n")
+//                        resultText.append("앞으로 ${leg.totalDuration.text} 뒤인\n")
+//                        resultText.append("🕐${leg.totalArrivalTime.text}에 도착 예정입니다.\n")
+//                        resultText.append("\n")
+//                        var num = 1
+//                        leg.steps.forEach { step ->
+//                            resultText.append("${num}:\n")
+//                            resultText.append("  상세설명: ${step.htmlInstructions}\n")
+//                            resultText.append("  소요시간: ${step.stepDuration.text}\n")
+//                            resultText.append("  구간거리: ${step.distance.text}\n")
+//                            resultText.append("  이동수단: ${step.travelMode}")
+//                            if (step.transitDetails != DirectionsTransitDetailsModel(
+//                                    DirectionsTransitStopModel(LatLngModel(0.0, 0.0), ""),
+//                                    TimeZoneTextValueObjectModel("", "", 0.0),
+//                                    DirectionsTransitStopModel(LatLngModel(0.0, 0.0), ""),
+//                                    TimeZoneTextValueObjectModel("", "", 0.0),
+//                                    (""),
+//                                    0,
+//                                    DirectionsTransitLineModel(
+//                                        emptyList(),
+//                                        "",
+//                                        "",
+//                                        "",
+//                                        "",
+//                                        "",
+//                                        "",
+//                                        DirectionsTransitVehicleModel("", "", "", "")
+//                                    ),
+//                                    0,
+//                                    ""
+//                                )
+//                            ) {
+//                                resultText.append(" : ${step.transitDetails.line.shortName}, ${step.transitDetails.line.name}\n")
+//                                resultText.append("    ${step.transitDetails.headSign} 행\n")
+//                                resultText.append("    탑승 장소: ${step.transitDetails.departureStop.name}\n")
+//                                resultText.append("    하차 장소: ${step.transitDetails.arrivalStop.name}\n")
+//                                resultText.append("    ${step.transitDetails.numStops}")
+//                                resultText.append(categorizeTransportation(step.transitDetails.line.vehicle.type))
+//                                resultText.append("\n\n")
+//
+//                            } else {
+//                                resultText.append("\n\n\n")
+//                            }
+//
+//                            num++
+//                        }
+//                    }
+//                }
+//                // TextView
+//                binding.resultTextView.text = resultText.toString()
+//            }
+//        })
         sharedViewModel.error.observe(viewLifecycleOwner) { errorMessage ->
             Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
         }
@@ -130,7 +166,86 @@ class DirectionsFragment : Fragment() {
         })
     }
 
-    private fun checkPermission(){
+//    private fun categorizeTransportation(transportationType: String): String {
+//        when (transportationType) {
+//            "BUS" -> {
+//                return "개 정류장 이동🚍\n"
+//            }
+//            "CABLE_CAR" -> {
+//                // 케이블 카에 대한 처리
+//                return " 케이블 카 이용🚟\n"
+//            }
+//            "COMMUTER_TRAIN" -> {
+//                // 통근 기차에 대한 처리
+//                return "개 역 이동🚞\n"
+//            }
+//            "FERRY" -> {
+//                // 페리에 대한 처리
+//                return " 페리 이용⛴️\n"
+//            }
+//            "FUNICULAR" -> {
+//                // 푸니큘러에 대한 처리
+//                return " 푸니큘러 이용🚋\n"
+//            }
+//            "GONDOLA_LIFT" -> {
+//                // 곤돌라 리프트에 대한 처리
+//                return " 곤돌라 리프트 이용🚠\n"
+//            }
+//            "HEAVY_RAIL" -> {
+//                // 대형 철도에 대한 처리
+//                return "개 역 이동🛤️\n"
+//            }
+//            "HIGH_SPEED_TRAIN" -> {
+//                // 고속 기차에 대한 처리
+//                return "개 역 이동🚄\n"
+//            }
+//            "INTERCITY_BUS" -> {
+//                // 시외 버스에 대한 처리
+//                return "개 정류장 이동🚌\n"
+//            }
+//            "LONG_DISTANCE_TRAIN" -> {
+//                // 장거리 기차에 대한 처리
+//                return "개 역 이동🚂\n"
+//            }
+//            "METRO_RAIL" -> {
+//                // 도시 철도에 대한 처리
+//                return "개 역 이동🚇\n"
+//            }
+//            "MONORAIL" -> {
+//                // 모노레일에 대한 처리
+//                return "개 역 이동🚝\n"
+//            }
+//            "OTHER" -> {
+//                // 기타에 대한 처리
+//                return " 이동\n"
+//            }
+//            "RAIL" -> {
+//                // 철도에 대한 처리
+//                return "개 역 이동🚃\n"
+//            }
+//            "SHARE_TAXI" -> {
+//                // 공유 택시에 대한 처리
+//                return " 공유 택시 이용🚖\n"
+//            }
+//            "SUBWAY" -> {
+//                // 지하철에 대한 처리
+//                return "개 역 이동🚉\n"
+//            }
+//            "TRAM" -> {
+//                // 트램에 대한 처리
+//                return "개 역 트램으로 이동🚊\n"
+//            }
+//            "TROLLEYBUS" -> {
+//                // 트롤리버스에 대한 처리
+//                return "개 정류장 트롤리버스로 이동🚎\n"
+//            }
+//            else -> {
+//                // 알 수 없는 경우 처리
+//                return " 이동\n"
+//            }
+//        }
+//    }
+    private fun checkPermission() {
         if (ActivityCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -147,6 +262,7 @@ class DirectionsFragment : Fragment() {
             return
         }
     }
+
     private fun getCurrentLocation() {
         if (ActivityCompat.checkSelfPermission(
                 requireContext(),
@@ -165,12 +281,12 @@ class DirectionsFragment : Fragment() {
                     val userLatLng = LatLng(it.latitude, it.longitude)
                     sharedViewModel.setUserLocation(userLatLng)
                 } ?: run {
-                    Toast.makeText(requireContext(), "Failed to get location", Toast.LENGTH_SHORT)
+                    Toast.makeText(requireContext(), "위치 얻기 실패", Toast.LENGTH_SHORT)
                         .show()
                 }
             }
             .addOnFailureListener {
-                Toast.makeText(requireContext(), "Failed to get location", Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), "위치 얻기 실패", Toast.LENGTH_SHORT)
                     .show()
             }
     }
@@ -179,6 +295,7 @@ class DirectionsFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -190,7 +307,8 @@ class DirectionsFragment : Fragment() {
                 // 권한이 부여되었으므로 현재 위치를 받아옴
                 getCurrentLocation()
             } else {
-                Toast.makeText(requireContext(), "Location permission denied", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Location permission denied", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
     }

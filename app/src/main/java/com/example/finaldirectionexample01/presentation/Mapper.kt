@@ -159,7 +159,6 @@ fun DirectionsStepEntity.toModel(): DirectionsStepModel {
     )
 }
 
-
 fun DirectionsTransitDetailsEntity.toModel() = DirectionsTransitDetailsModel(
     arrivalStop = arrivalStop.toModel() ?: DirectionsTransitStopModel(
         location = LatLngModel(0.0, 0.0),

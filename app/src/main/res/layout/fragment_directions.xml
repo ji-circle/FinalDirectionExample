@@ -6,23 +6,18 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <EditText
-        android:id="@+id/originEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter origin" />
 
     <EditText
         android:id="@+id/destinationEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter destination" />
+        android:hint="목적지" />
 
     <EditText
         android:id="@+id/typeEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter type" />
+        android:hint="이동 방법: transit, driving, walking, bicycling..." />
 
 
     <LinearLayout

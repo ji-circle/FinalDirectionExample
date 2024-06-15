@@ -39,8 +39,8 @@ class DirectionsViewModel1(private val getDirectionsUseCase: GetDirectionsUseCas
     private val _latLngBounds = MutableLiveData<List<LatLngModel>>()
     val latLngBounds: LiveData<List<LatLngModel>> get() = _latLngBounds
 
-    private val _userLocation = MutableLiveData<LatLngModel>()
-    val userLocation: LiveData<LatLngModel> get() = _userLocation
+    private val _userLocation = MutableLiveData<LatLng>()
+    val userLocation: LiveData<LatLng> get() = _userLocation
 
 
     fun getDirections(origin: String, destination: String, mode: String) {
@@ -70,7 +70,7 @@ class DirectionsViewModel1(private val getDirectionsUseCase: GetDirectionsUseCas
         )
     }
 
-    fun setUserLocation(location: LatLngModel) {
+    fun setUserLocation(location: LatLng) {
         _userLocation.value = location
     }
 
@@ -124,7 +124,7 @@ class DirectionsViewModel1(private val getDirectionsUseCase: GetDirectionsUseCas
     fun getOrigin(): LatLng {
         val lat1 = _directionsResult.value?.routes?.get(0)?.legs?.get(0)?.totalStartLocation?.lat ?: 0.0
         val lng1 = _directionsResult.value?.routes?.get(0)?.legs?.get(0)?.totalStartLocation?.lng?: 0.0
-        Log.d("확인", "origin : ${_directionsResult.value?.routes?.get(0)?.legs?.get(0)?.totalStartLocation}")
+        Log.d("확인", "origin : ${_directionsResult.value?.routes?.get(0)?.legs?.get(0)?.totalStartLocation?.lat}")
         return LatLng(lat1, lng1)
 
     }
@@ -132,9 +132,17 @@ class DirectionsViewModel1(private val getDirectionsUseCase: GetDirectionsUseCas
     fun getDestination(): LatLng {
         val lat1 = _directionsResult.value?.routes?.get(0)?.legs?.get(0)?.totalEndLocation?.lat ?: 0.0
         val lng1 = _directionsResult.value?.routes?.get(0)?.legs?.get(0)?.totalEndLocation?.lng?: 0.0
-        Log.d("확인", "dest : ${_directionsResult.value?.routes?.get(0)?.legs?.get(0)?.totalEndLocation}")
+        Log.d("확인", "dest : ${_directionsResult.value?.routes?.get(0)?.legs?.get(0)?.totalEndLocation?.lat}")
         return LatLng(lat1, lng1)
     }
+    // 사용자 위치를 문자열로 반환하는 메서드 추가
+    fun getUserLocationString(delimiter: String = ","): String? {
+        val location = _userLocation.value
+        return location?.let {
+            "${it.latitude}$delimiter${it.longitude}"
+        }
+    }
+
 }
 
 class DirectionsViewModel1Factory(private val getDirectionsUseCase: GetDirectionsUseCase) :

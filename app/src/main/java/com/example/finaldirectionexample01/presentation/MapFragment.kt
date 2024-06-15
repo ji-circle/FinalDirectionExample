@@ -105,6 +105,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMapBinding.inflate(inflater, container, false)
+
         return binding.root
     }
 
@@ -114,23 +115,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         initializeMapView()
 
         setupClickListener()
-
-
-//        googleMap?.setOnCameraIdleListener {
-//            // 경로를 포함하는 영역 계산하여 지도의 중심을 이동
-//            val latLngBoundsBuilder = LatLngBounds.builder()
-//            sharedViewModel.latLngBounds.value?.forEach {
-//                latLngBoundsBuilder.include(LatLng(it.lat, it.lng))
-//            }
-//            val bounds = latLngBoundsBuilder.build()
-//            val padding = 100
-//
-//            // 현재 지도에 보이는 bounds와 새로 계산된 bounds가 다를 때에만 지도 이동
-//            val currentBounds = googleMap!!.projection.visibleRegion.latLngBounds
-//            if (!currentBounds.contains(bounds.center)) {
-//                googleMap!!.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding))
-//            }
-//        }
 
 
     }
@@ -243,9 +227,12 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         }
         val bounds = latLngBounds.build()
 
-        //위 줄 지우기
-        val padding = 100
-        googleMap?.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding))
+        if (bounds.southwest != null && bounds.northeast != null) {
+            val padding = 100
+            googleMap?.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding))
+        } else {
+            Log.e("확인 mapf", "LatLngBounds 실패")
+        }
     }
 
     private fun setLine(myMap: GoogleMap) {
@@ -265,8 +252,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         setMarker(myMap)
 //
 
-//        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
-//        updateLocation()
 
         setupMapListeners()
         // 사용자 위치 설정
@@ -279,39 +264,5 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     }
 
-//    private fun updateLocation() {
-//        val locationRequest = LocationRequest.create().apply {
-//            interval = 1000
-//            fastestInterval = 500
-//            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-//        }
-//
-//        locationCallback = object : LocationCallback(){
-//            //1초에 한번씩 변경된 위치 정보가 onLocationResult 으로 전달된다.
-//            override fun onLocationResult(locationResult: LocationResult) {
-//                locationResult.let{
-//                    for (location in it.locations){
-//                        Log.d("위치정보",  "위도: ${location.latitude} 경도: ${location.longitude}")
-//                        setLastLocation(location) //계속 실시간으로 위치를 받아오고 있기 때문에 맵을 확대해도 다시 줄어든다.
-//                    }
-//                }
-//            }
-//        }
-//        //권한 처리
-//        if (ActivityCompat.checkSelfPermission(
-//                this,
-//                Manifest.permission.ACCESS_FINE_LOCATION
-//            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-//                this,
-//                Manifest.permission.ACCESS_COARSE_LOCATION
-//            ) != PackageManager.PERMISSION_GRANTED
-//        ) {
-//            return
-//        }
-//
-//        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback,
-//            Looper.myLooper()!!
-//        )
-//    }
 
 }

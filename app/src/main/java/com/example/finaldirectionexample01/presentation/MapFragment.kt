@@ -47,10 +47,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     private var googleMap: GoogleMap? = null
 
-    //private var isPolylineVisible = false
-
-    private var polylineVm: PolylineOptions?=null
-
 
     private lateinit var locationPermission: ActivityResultLauncher<Array<String>>
     private lateinit var locationCallback: LocationCallback
@@ -63,13 +59,10 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     // DirectionsViewModel1Factory 가져오기
     private val directionsViewModel1Factory: DirectionsViewModel1Factory by lazy {
         appContainer.directions1Container.directionsViewModel1Factory
-            ?: throw IllegalStateException("DirectionsViewModel1Factory not initialized properly")
     }
 
     // SharedViewModel 가져오기
     private val sharedViewModel: DirectionsViewModel1 by activityViewModels { directionsViewModel1Factory }
-
-    //sharedViewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,19 +78,10 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             }
         }
 
-        // Request the permissions
         requestLocationPermission()
 
     }
 
-//    private fun togglePolyline(){
-//        if(monitorPolyline == null){
-//            //monitorPolyline = googleMap?.addPolyline()
-//        }else{
-//            monitorPolyline?.remove()
-//            monitorPolyline=null
-//        }
-//    }
     private fun requestLocationPermission() {
         locationPermission.launch(
             arrayOf(
@@ -118,16 +102,17 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initializeMapView()
+
+        setupClickListener()
+
+
+    }
+
+    private fun setupClickListener() {
         binding.btnMapBottomSheet.setOnClickListener {
             val bottomSheetDialogFragment = RouteDetailsBottomSheet()
             bottomSheetDialogFragment.show(parentFragmentManager, "tag")
-        }
-        binding.line.setOnClickListener {
-//            isPolylineVisible = !isPolylineVisible
-            // 경로 나타내기와 숨기기 버튼 구현
-//            googleMap?.clear()
-            googleMap?.let { it1 -> setLine(it1) }
-//            googleMap?.let { it1 -> setMarker(it1) }
         }
 
         binding.btnZoomIn.setOnClickListener {
@@ -137,32 +122,13 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             googleMap?.animateCamera(CameraUpdateFactory.zoomOut())
         }
 
-        initializeMapView()
-
-
     }
+
+
     private fun initializeMapView() {
         val mapFragment = childFragmentManager.findFragmentById(R.id.mapView) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
     }
-//    private fun initializeMapView() {
-//
-//        val mapFragment = childFragmentManager.findFragmentById(R.id.mapView) as SupportMapFragment?
-//        mapFragment?.getMapAsync { map ->
-//            googleMap = map
-//            // Optionally enable the user location
-//            if (ContextCompat.checkSelfPermission(
-//                    requireContext(),
-//                    Manifest.permission.ACCESS_FINE_LOCATION
-//                ) == PackageManager.PERMISSION_GRANTED
-//            ) {
-//                googleMap?.isMyLocationEnabled = true
-//
-//            }
-//
-//
-//        }
-//    }
 
 
     override fun onResume() {
@@ -190,11 +156,12 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         mapFragment?.onLowMemory()
     }
 
-    private fun setMarker(myMap: GoogleMap){
+    private fun setMarker(myMap: GoogleMap) {
         googleMap = myMap
         Log.d("라인확인", "onmapready")
         val markerOrigin = MarkerOptions().position(sharedViewModel.getOrigin()).title("출발지")
-        val markerDestination = MarkerOptions().position(sharedViewModel.getDestination()).title("목적지")
+        val markerDestination =
+            MarkerOptions().position(sharedViewModel.getDestination()).title("목적지")
 
         myMap.addMarker(markerOrigin)
         myMap.addMarker(markerDestination)
@@ -209,33 +176,21 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         googleMap?.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding))
     }
 
-    private fun setLine(myMap: GoogleMap){
+    private fun setLine(myMap: GoogleMap) {
         googleMap = myMap
-        
-        sharedViewModel.polyLine.observe(viewLifecycleOwner, Observer { polylines->
-            //if(isPolylineVisible){
-                polylines.forEach{polyline ->
+            sharedViewModel.polyLine.observe(viewLifecycleOwner, Observer { polylines ->
+
+                polylines.forEach { polyline ->
                     googleMap?.addPolyline(polyline)
                 }
-           // }
-//            else{
-//                googleMap?.clear()
-//                setMarker(googleMap!!)
-//            }
-        })
-//        // 경로를 포함하는 영역 계산하여 지도의 중심을 이동
-//        val latLngBounds = LatLngBounds.builder()
-//        sharedViewModel.latLngBounds.value?.forEach {
-//            latLngBounds.include(LatLng(it.lat, it.lng))
-//        }
-//        val bounds = latLngBounds.build()
-//        val padding = 100
-//        googleMap?.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding))
+
+            })
     }
+
     override fun onMapReady(myMap: GoogleMap) {
         googleMap = myMap
+        setLine(myMap)
         setMarker(myMap)
-//        setLine(myMap)
     }
 
 }

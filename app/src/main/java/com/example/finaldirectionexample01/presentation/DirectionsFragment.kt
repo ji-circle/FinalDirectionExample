@@ -28,7 +28,7 @@ class DirectionsFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    //private lateinit var locationCallback: LocationCallback
+    private lateinit var locationCallback: LocationCallback
     private val LOCATION_PERMISSION_REQUEST_CODE = 1
 
 
@@ -142,12 +142,12 @@ class DirectionsFragment : Fragment() {
                     val userLatLng = LatLng(it.latitude, it.longitude)
                     sharedViewModel.setUserLocation(userLatLng)
                 } ?: run {
-                    Toast.makeText(requireContext(), "위치 얻기 실패", Toast.LENGTH_SHORT)
+                    Toast.makeText(requireContext(), "1 위치 얻기 실패", Toast.LENGTH_SHORT)
                         .show()
                 }
             }
             .addOnFailureListener {
-                Toast.makeText(requireContext(), "위치 얻기 실패", Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), "2 위치 얻기 실패", Toast.LENGTH_SHORT)
                     .show()
             }
     }

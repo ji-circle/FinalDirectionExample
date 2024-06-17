@@ -54,7 +54,7 @@ class RouteDetailsBottomSheet : BottomSheetDialogFragment() {
             Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
         }
         //addCheckBoxes()
-
+    //dfjla
     }
     override fun onDestroyView() {
         super.onDestroyView()

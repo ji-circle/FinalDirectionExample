@@ -19,6 +19,37 @@
         android:layout_height="wrap_content"
         android:hint="이동 방법: transit, driving, walking, bicycling..." />
 
+    <EditText
+        android:id="@+id/TravelModeEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="선호 수단: bus, subway, train, tram, rail..." />
+
+
+    <EditText
+        android:id="@+id/RoutePrfEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="선호 방식: less_walking, fewer_transfers" />
+
+    <EditText
+        android:id="@+id/DepTimeEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="false"
+        android:hint="출발 시간"
+        android:inputType="none" />
+
+    <EditText
+        android:id="@+id/ArrTimeEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="false"
+        android:hint="도착 시간"
+        android:inputType="none" />
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -37,14 +68,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="bottomSheet"
-            android:visibility="invisible"/>
+            android:visibility="invisible" />
 
         <Button
             android:id="@+id/btnMap"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="invisible"
-            android:text="showMap"/>
+            android:text="showMap"
+            android:visibility="invisible" />
 
     </LinearLayout>
 

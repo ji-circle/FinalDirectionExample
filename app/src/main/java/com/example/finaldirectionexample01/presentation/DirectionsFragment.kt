@@ -1,6 +1,7 @@
 package com.example.finaldirectionexample01.presentation
 
 import android.Manifest
+import android.app.TimePickerDialog
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
@@ -14,6 +15,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import com.example.finaldirectionexample01.FinalDirectionApplication
 import com.example.finaldirectionexample01.R
 import com.example.finaldirectionexample01.data.AppContainer
@@ -22,6 +24,15 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.util.Calendar
+import java.util.Locale
 
 class DirectionsFragment : Fragment() {
     private var _binding: FragmentDirectionsBinding? = null
@@ -72,13 +83,21 @@ class DirectionsFragment : Fragment() {
                 Log.d("확인", "origin , ${origin}")
                 val destination = binding.destinationEditText.text.toString()
                 val mode = binding.typeEditText.text.toString() ?: "transit" //이거 스피너로 바꾸기
-                sharedViewModel.getDirections(origin, destination, mode)
+                val travelMode = binding.TravelModeEditText.text.toString()
+                val departureTime = sharedViewModel.getUnixTimestamp().toString().toInt()
+                Log.d("확인 확인", "$departureTime")
+                val transitRoutingPreference = binding.RoutePrfEditText.text.toString()
+                sharedViewModel.getDirectionsWithDepartureTmRp(origin, destination, departureTime, travelMode, transitRoutingPreference)
+                //sharedViewModel.getDirections(origin, destination, mode)
                 binding.btnBottomSheet.isVisible = true
                 binding.btnMap.isVisible = true
             } else {
                 Log.d("확인 에러발생", "origin null")
             }
         }
+
+        setUpTimePicker()
+        observeViewModel()
 
         binding.btnBottomSheet.setOnClickListener {
             val bottomSheetDialogFragment = RouteDetailsBottomSheet()
@@ -92,7 +111,7 @@ class DirectionsFragment : Fragment() {
                 .commit()
         }
 
-        sharedViewModel.directionExplanations.observe(viewLifecycleOwner, Observer{
+        sharedViewModel.directionExplanations.observe(viewLifecycleOwner, Observer {
             binding.resultTextView.text = it
         })
 
@@ -104,6 +123,50 @@ class DirectionsFragment : Fragment() {
         sharedViewModel.userLocation.observe(viewLifecycleOwner, Observer { location ->
 //            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15f))
         })
+    }
+
+    private fun observeViewModel() {
+        sharedViewModel.selectedTime.observe(viewLifecycleOwner, { time ->
+            time?.let {
+                val selectedTime = String.format(Locale.getDefault(), "%02d:%02d", it.hour, it.minute)
+                binding.DepTimeEditText.setText(selectedTime)
+            }
+        })
+    }
+
+    private fun setUpTimePicker() {
+        binding.DepTimeEditText.setOnClickListener {
+            showTimePickerDialog()
+        }
+    }
+
+    private fun showTimePickerDialog() {
+        val currentTime = Calendar.getInstance()
+        val currentHour = currentTime.get(Calendar.HOUR_OF_DAY)
+        val currentMinute = currentTime.get(Calendar.MINUTE)
+
+        TimePickerDialog(requireContext(), { _, hourOfDay, minute ->
+            val selectedTime = String.format(Locale.getDefault(), "%02d:%02d", hourOfDay, minute)
+            binding.DepTimeEditText.setText(selectedTime)
+
+            sharedViewModel.setTime(hourOfDay, minute)
+
+        }, currentHour, currentMinute, true).show()
+    }
+
+
+    private fun convertToUnixTimestamp(hour: Int, minute: Int): Long {
+        val currentDate = LocalDate.now()
+        val currentTime = LocalTime.now()
+        var dateTime = LocalDateTime.of(currentDate, LocalTime.of(hour, minute))
+
+        if (dateTime.toLocalTime().isBefore(currentTime)) {
+            dateTime = dateTime.plusDays(1)
+        }
+
+        val zonedDateTime = ZonedDateTime.of(dateTime, ZoneId.systemDefault())
+        return zonedDateTime.toEpochSecond()
+
     }
 
     private fun checkPermission() {

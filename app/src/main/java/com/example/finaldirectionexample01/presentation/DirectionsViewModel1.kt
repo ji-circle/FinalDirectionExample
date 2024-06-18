@@ -7,13 +7,22 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.example.finaldirectionexample01.domain.usecase.GetDirWithDepTmRpUseCase
 import com.example.finaldirectionexample01.domain.usecase.GetDirectionsUseCase
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.PolylineOptions
 import com.google.maps.android.PolyUtil
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
 
-class DirectionsViewModel1(private val getDirectionsUseCase: GetDirectionsUseCase) : ViewModel() {
+class DirectionsViewModel1(
+    private val getDirectionsUseCase: GetDirectionsUseCase,
+    private val getDirWithDepTmRpUseCase: GetDirWithDepTmRpUseCase
+) : ViewModel() {
     private val _directionsResult = MutableLiveData<DirectionsModel>()
     val directionsResult: LiveData<DirectionsModel> get() = _directionsResult
 
@@ -46,6 +55,27 @@ class DirectionsViewModel1(private val getDirectionsUseCase: GetDirectionsUseCas
     private val _shortExplanations = MutableLiveData<String>()
     val shortExplanations: LiveData<String> get() = _shortExplanations
 
+    //추가한것들
+    private val _selectedTime = MutableLiveData<LocalTime>()
+    val selectedTime: LiveData<LocalTime> get() = _selectedTime
+
+    fun setTime(hour: Int, minute: Int) {
+        _selectedTime.value = LocalTime.of(hour, minute)
+    }
+
+    fun getUnixTimestamp(): Long? {
+        val currentDate = LocalDateTime.now().toLocalDate()
+        val currentTime = LocalTime.now()
+        var dateTime = LocalDateTime.of(currentDate, _selectedTime.value ?: return null)
+
+        if (dateTime.toLocalTime().isBefore(currentTime)) {
+            dateTime = dateTime.plusDays(1)
+        }
+
+        val zonedDateTime = ZonedDateTime.of(dateTime, ZoneId.systemDefault())
+        return zonedDateTime.toEpochSecond()
+    }
+
     fun getDirections(origin: String, destination: String, mode: String) {
         Log.d("확인", "$origin, $destination, $mode")
         viewModelScope.launch {
@@ -58,6 +88,35 @@ class DirectionsViewModel1(private val getDirectionsUseCase: GetDirectionsUseCas
                 setShortDirectionsResult()
                 setDirectionsResult()
                 Log.d("확인", "viewmodel: ${_directionsResult.value}")
+            } catch (e: Exception) {
+                _error.postValue(e.message)
+            }
+        }
+    }
+
+    fun getDirectionsWithDepartureTmRp(
+        origin: String,
+        destination: String,
+        departureTime: Int,
+        travelMode: String,
+        transitRoutingPreference: String
+    ) {
+        viewModelScope.launch {
+            try {
+                updateODM(origin, destination, mode = "transit")
+                val result = getDirWithDepTmRpUseCase(
+                    origin,
+                    destination,
+                    departureTime,
+                    travelMode,
+                    transitRoutingPreference
+                )
+                _directionsResult.value = result.toModel()
+                updatePolyLineWithColors()
+                updateBounds()
+                setShortDirectionsResult()
+                setDirectionsResult()
+                Log.d("확인", "viewmodel 2: ${_directionsResult.value}")
             } catch (e: Exception) {
                 _error.postValue(e.message)
             }
@@ -92,6 +151,8 @@ class DirectionsViewModel1(private val getDirectionsUseCase: GetDirectionsUseCas
             val polylines = mutableListOf<PolylineOptions>()
 
             routes?.forEach { route ->
+                //여기서 인덱싱하던가 아니면 setSelected으로 한개만 선택하기
+
                 route.legs.forEach { leg ->
                     leg.steps.forEach { step ->
                         val decodedPoints = PolyUtil.decode(step.polyline.points ?: "")
@@ -315,6 +376,7 @@ class DirectionsViewModel1(private val getDirectionsUseCase: GetDirectionsUseCas
             Log.d("확인 setDirections", "null")
         }
     }
+
     private fun formatShortDirectionsExplanations(directions: DirectionsModel) {
         val resultText = StringBuilder()
 
@@ -332,12 +394,15 @@ class DirectionsViewModel1(private val getDirectionsUseCase: GetDirectionsUseCas
 
 }
 
-class DirectionsViewModel1Factory(private val getDirectionsUseCase: GetDirectionsUseCase) :
+class DirectionsViewModel1Factory(
+    private val getDirectionsUseCase: GetDirectionsUseCase,
+    private val getDirWithDepTmRpUseCase: GetDirWithDepTmRpUseCase
+) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(DirectionsViewModel1::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return DirectionsViewModel1(getDirectionsUseCase) as T
+            return DirectionsViewModel1(getDirectionsUseCase, getDirWithDepTmRpUseCase) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

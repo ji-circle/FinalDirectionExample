@@ -1,6 +1,6 @@
 package com.example.finaldirectionexample01.domain.usecase
 
-import com.example.finaldirectionexample01.data.DirectionsRepository
+import com.example.finaldirectionexample01.domain.DirectionsRepository
 
 class GetDirectionsUseCase
 constructor(private val repository: DirectionsRepository){

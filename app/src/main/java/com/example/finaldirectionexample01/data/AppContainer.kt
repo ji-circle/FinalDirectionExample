@@ -1,6 +1,7 @@
 package com.example.finaldirectionexample01.data
 
 import com.example.finaldirectionexample01.api.NetworkClient
+import com.example.finaldirectionexample01.domain.DirectionsRepository
 import com.example.finaldirectionexample01.domain.usecase.GetDirectionsUseCase
 import com.example.finaldirectionexample01.presentation.DirectionsViewModel1Factory
 
